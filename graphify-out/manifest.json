@@ -13,7 +13,7 @@
   },
   "ayoub.session.sql": {
     "mtime": 1789179720.8724802,
-    "seen": 1789259913.74177,
+    "seen": 1791670911.4437308,
     "ast_hash": "",
     "semantic_hash": ""
   },
@@ -90,8 +90,8 @@
     "semantic_hash": "7972b379091e5193309cd297b48742c8"
   },
   "server/database.sql": {
-    "mtime": 1789216174.138216,
-    "seen": 1789253900.961309,
+    "mtime": 1789259249.1634123,
+    "seen": 1791670911.4437876,
     "ast_hash": "",
     "semantic_hash": ""
   },
@@ -825,6 +825,12 @@
     "mtime": 1791666316.0753274,
     "seen": 1791668218.3553674,
     "ast_hash": "1e812428541122b73db000beb96fa26c",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1791672577.1989782,
+    "seen": 1791672584.7485788,
+    "ast_hash": "426138e2f77bbf74f5033967ba48868c",
     "semantic_hash": ""
   }
 }

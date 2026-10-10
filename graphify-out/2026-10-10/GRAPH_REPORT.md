@@ -1,16 +1,16 @@
 # Graph Report - Delecius  (2026-10-10)
 
 ## Corpus Check
-- 124 files · ~356,803 words
+- 124 files · ~356,822 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1210 nodes · 1220 edges · 104 communities (91 shown, 11 thin omitted)
+- 1210 nodes · 1216 edges · 105 communities (91 shown, 11 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 23 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `81972a81`
+- Built from commit: `794117c2`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -54,7 +54,7 @@
 - Security Reference
 - Firebase Crashlytics - Android Setup Guide (Kotlin)
 - Firebase Remote Config - Android Setup Guide (Kotlin)
-- Native SQL Examples
+- Examples
 - Schema Reference
 - firebase-basics/SKILL.md
 - 1. Vector Similarity Search (Semantic)
@@ -93,7 +93,6 @@
 - Firebase Auth & Google Sign-In for Flutter
 - Basic Checks
 - Alternative: Manual MCP Configuration (Project Scope)
-- firebase-firestore/SKILL.md
 - Manual Initialization
 - Firebase Web Setup Guide
 - Data Seeding & Bulk Operations Reference
@@ -110,13 +109,14 @@
 - Antigravity Setup
 - Recommended Method: Using Plugins
 - Cursor Setup
-- Writing Data
+- Native SQL Examples
 - db.js
 - Android Studio Setup
 - start
 - scripts
 - authenticateToken
 - Package.swift
+- Movie Review App
 
 ## God Nodes (most connected - your core abstractions)
 1. `Delicious Restaurant` - 21 edges
@@ -150,7 +150,7 @@
 - **Beverage Products** — client_imgs_coca_coca_cola_can, client_imgs_sprite_sprite_can [INFERRED 0.85]
 - **Pizza Menu Products** — client_imgs_3fromages_four_cheese_pizza, client_imgs_4seasons_four_seasons_pizza, client_imgs_mega_all_cheese_pizza, client_imgs_frontpic_hero_pizza_image [INFERRED 0.85]
 
-## Communities (104 total, 11 thin omitted)
+## Communities (105 total, 11 thin omitted)
 
 ### Community 0 - "Delicious Restaurant"
 Cohesion: 0.05
@@ -248,10 +248,6 @@ Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphif
 Cohesion: 0.08
 Nodes (26): 1. Provision Firebase AI Logic (ALL platforms), 2. Add the SDK and initialize the service in the app, Advanced Features, App Check Debug Tokens for Local Development & CI/CD, Chat Session (Multi-turn), CI/CD Pipelines (Pre-Provisioned), Core Capabilities, Firebase AI Logic Basics (+18 more)
 
-### Community 34 - "validators.js"
-Cohesion: 0.67
-Nodes (3): isValidDZPhone(), isValidEmail(), normalizeDZPhone()
-
 ### Community 35 - "Key Attributes"
 Cohesion: 0.08
 Nodes (23): `cleanUrls` (Optional), Full Example, `headers` (Optional), Hosting Configuration (`firebase.json`), `ignore` (Optional), Key Attributes, `public` (Required), `redirects` (Optional) (+15 more)
@@ -272,9 +268,9 @@ Nodes (21): 1. Add dependencies to Gradle build files, 2. *Optional:* Install th
 Cohesion: 0.08
 Nodes (21): 1. Add dependencies to Gradle build files, 2. Set in-app defaults, 3. Fetch and activate values, Firebase Remote Config - Android Setup Guide (Kotlin), Prerequisites, Add Swift Package Dependencies, Fetch and Activate Values, Firebase Remote Config iOS Setup Guide (+13 more)
 
-### Community 40 - "Native SQL Examples"
-Cohesion: 0.10
-Nodes (20): Advanced aggregation with RANK, Advanced CTE with upserts (atomic get-or-create), Basic SELECT with field aliasing, Basic UPDATE, Blog with Permissions, E-Commerce Store, Examples, Movie Review App (+12 more)
+### Community 40 - "Examples"
+Cohesion: 0.25
+Nodes (7): Blog with Permissions, E-Commerce Store, Examples, Operations, Operations with Role Checks, Schema, Schema
 
 ### Community 41 - "Schema Reference"
 Cohesion: 0.10
@@ -361,16 +357,16 @@ Cohesion: 0.17
 Nodes (11): 1. Provision Firestore, 2. Add dependencies to Gradle build files, 3. Initialize Firestore, 4. Decision framework: Mandatory pipeline architecture, 5. Pipeline examples, 6. Real-time listener & document operations, Cloud Firestore (Enterprise edition) - Android Setup Guide (Kotlin), Full-text search (+3 more)
 
 ### Community 62 - "⛔️ CRITICAL RULE: NO INLINE INITIALIZATION ⛔️"
-Cohesion: 0.17
-Nodes (12): 1. Import and Initialize, 2. Type-Safe Data Models (Codable), 3. Basic CRUD Operations, 4. Pipeline Queries, 5. Realtime Listeners in SwiftUI (Lifecycle Best Practices), ⛔️ CRITICAL RULE: NO INLINE INITIALIZATION ⛔️, Examples, Initialization (+4 more)
+Cohesion: 0.13
+Nodes (14): 1. Import and Initialize, 2. Type-Safe Data Models (Codable), 3. Basic CRUD Operations, 4. Pipeline Queries, 5. Realtime Listeners in SwiftUI (Lifecycle Best Practices), ⛔️ CRITICAL RULE: NO FirebaseFirestoreSwift ⛔️, ⛔️ CRITICAL RULE: NO INLINE INITIALIZATION ⛔️, Examples (+6 more)
 
 ### Community 63 - "Cloud Firestore (Standard edition) - Android Setup Guide (Kotlin)"
 Cohesion: 0.17
 Nodes (11): 1. Provision Firestore, 2. Add dependencies to Gradle build files, 3. Initialize Firestore, 4. Work with data, Add data, Cloud Firestore (Standard edition) - Android Setup Guide (Kotlin), Delete data, Jetpack Compose (Modern) (+3 more)
 
 ### Community 64 - "Firestore Web SDK Usage Guide"
-Cohesion: 0.17
-Nodes (11): Firestore Web SDK Usage Guide, Get a Single Document (`getDoc`), Get Multiple Documents (`getDocs`), Handle Changes (Added/Modified/Removed), Initialization, Listen to a Document/Query (`onSnapshot`), Order and Limit, Queries (+3 more)
+Cohesion: 0.12
+Nodes (16): Add a Document with Auto-ID (`addDoc`), Firestore Web SDK Usage Guide, Get a Single Document (`getDoc`), Get Multiple Documents (`getDocs`), Handle Changes (Added/Modified/Removed), Initialization, Listen to a Document/Query (`onSnapshot`), Order and Limit (+8 more)
 
 ### Community 65 - "⛔️ CRITICAL RULE: NO INLINE INITIALIZATION ⛔️"
 Cohesion: 0.18
@@ -492,9 +488,9 @@ Nodes (4): 1. Install and Verify Plugins, 2. Restart and Verify Connection, Clau
 Cohesion: 0.40
 Nodes (4): 1. Install and Verify Firebase Skills, 2. Configure and Verify Firebase MCP Server, 3. Restart and Verify Connection, Cursor Setup
 
-### Community 97 - "Writing Data"
-Cohesion: 0.40
-Nodes (5): Add a Document with Auto-ID (`addDoc`), Set a Document (`setDoc`), Transactions, Update a Document (`updateDoc`), Writing Data
+### Community 97 - "Native SQL Examples"
+Cohesion: 0.25
+Nodes (8): Advanced aggregation with RANK, Advanced CTE with upserts (atomic get-or-create), Basic SELECT with field aliasing, Basic UPDATE, Multi-statement Transactions, Native SQL Examples, UPDATE with RETURNING and Auth Context, Use of extensions (e.g. PostGIS for geospatial data)
 
 ### Community 98 - "db.js"
 Cohesion: 0.40
@@ -516,17 +512,19 @@ Nodes (3): scripts, dev, start
 Cohesion: 0.67
 Nodes (3): authenticateToken(), parseCookie(), requireAdmin()
 
+### Community 104 - "Movie Review App"
+Cohesion: 0.40
+Nodes (5): Movie Review App, Mutations, Queries, Realtime Queries, Schema
+
 ## Knowledge Gaps
-- **761 isolated node(s):** `PackageDescription`, `Foundation`, `PathKit`, `AppState`, `ScrollReveal` (+756 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 808 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **761 isolated node(s):** `Overview`, `Target Migration Workflows`, `1. Declarative IAM & APIs (Zero-Local-Overhead)`, `2. Global Parameter Access Restriction`, `3. V2 Concurrency & Cost Parity` (+756 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 809 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Firebase SQL Connect` connect `Firebase SQL Connect` to `firebase-data-connect/SKILL.md`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
-- **What connects `PackageDescription`, `Foundation`, `PathKit` to the rest of the system?**
+- **What connects `Overview`, `Target Migration Workflows`, `1. Declarative IAM & APIs (Zero-Local-Overhead)` to the rest of the system?**
   _761 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Delicious Restaurant` be split into smaller, more focused modules?**
   _Cohesion score 0.045328399629972246 - nodes in this community are weakly interconnected._
@@ -538,3 +536,5 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
 - **Should `Firebase AI Logic on Web (JavaScript)` be split into smaller, more focused modules?**
   _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
+- **Should `App Hosting CLI Commands` be split into smaller, more focused modules?**
+  _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._

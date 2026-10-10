@@ -1,0 +1,16 @@
+{
+  "name": "delecius",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Delicious Restaurant — Railway/Railpack entrypoint (Node app lives in server/)",
+  "main": "server/server.js",
+  "scripts": {
+    "postinstall": "npm --prefix server install",
+    "build": "npm --prefix server install",
+    "start": "node server/server.js",
+    "dev": "npm --prefix server run dev"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -3552,12 +3552,12 @@
     },
     {
       "id": "server_package",
-      "label": "package.json",
+      "label": "server/package.json",
       "_origin": "ast",
       "community": 3,
       "community_name": "package.json",
       "file_type": "code",
-      "norm_label": "package.json",
+      "norm_label": "server/package.json",
       "source_file": "server/package.json",
       "source_location": "L1"
     },
@@ -9600,6 +9600,18 @@
       "source_location": "L114"
     },
     {
+      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup",
+      "label": "enterprise/ios_setup.md",
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "\u26d4\ufe0f CRITICAL RULE: NO INLINE INITIALIZATION \u26d4\ufe0f",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "enterprise/ios_setup.md",
+      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_1_import_and_initialize",
       "label": "1. Import and Initialize",
       "_origin": "ast",
@@ -9660,6 +9672,18 @@
       "source_location": "L135"
     },
     {
+      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_critical_rule_no_firebasefirestoreswift",
+      "label": "\u26d4\ufe0f CRITICAL RULE: NO FirebaseFirestoreSwift \u26d4\ufe0f",
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "\u26d4\ufe0f CRITICAL RULE: NO INLINE INITIALIZATION \u26d4\ufe0f",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "\u26d4\ufe0f critical rule: no firebasefirestoreswift \u26d4\ufe0f",
+      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
+      "source_location": "L6"
+    },
+    {
       "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_critical_rule_no_inline_initialization",
       "label": "\u26d4\ufe0f CRITICAL RULE: NO INLINE INITIALIZATION \u26d4\ufe0f",
       "_origin": "ast",
@@ -9682,6 +9706,18 @@
       "norm_label": "examples",
       "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
       "source_location": "L116"
+    },
+    {
+      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_firestore_enterprise_native_mode_on_ios",
+      "label": "Firestore Enterprise Native Mode on iOS",
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "\u26d4\ufe0f CRITICAL RULE: NO INLINE INITIALIZATION \u26d4\ufe0f",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "firestore enterprise native mode on ios",
+      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
+      "source_location": "L1"
     },
     {
       "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_initialization",
@@ -9900,6 +9936,18 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_add_a_document_with_auto_id_adddoc",
+      "label": "Add a Document with Auto-ID (`addDoc`)",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "add a document with auto-id (`adddoc`)",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L44"
+    },
+    {
       "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_firestore_web_sdk_usage_guide",
       "label": "Firestore Web SDK Usage Guide",
       "_origin": "ast",
@@ -10020,6 +10068,18 @@
       "source_location": "L129"
     },
     {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_set_a_document_setdoc",
+      "label": "Set a Document (`setDoc`)",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "set a document (`setdoc`)",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L26"
+    },
+    {
       "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_simple_and_compound_queries",
       "label": "Simple and Compound Queries",
       "_origin": "ast",
@@ -10030,6 +10090,42 @@
       "norm_label": "simple and compound queries",
       "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
       "source_location": "L167"
+    },
+    {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_transactions",
+      "label": "Transactions",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "transactions",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L73"
+    },
+    {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_update_a_document_updatedoc",
+      "label": "Update a Document (`updateDoc`)",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "update a document (`updatedoc`)",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L58"
+    },
+    {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_writing_data",
+      "label": "Writing Data",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "writing data",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L24"
     },
     {
       "id": "agents_skills_firebase_firestore_references_standard_ios_setup",
@@ -12072,42 +12168,6 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup",
-      "label": "enterprise/ios_setup.md",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "firebase-firestore/SKILL.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "enterprise/ios_setup.md",
-      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_critical_rule_no_firebasefirestoreswift",
-      "label": "\u26d4\ufe0f CRITICAL RULE: NO FirebaseFirestoreSwift \u26d4\ufe0f",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "firebase-firestore/SKILL.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "\u26d4\ufe0f critical rule: no firebasefirestoreswift \u26d4\ufe0f",
-      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
-      "source_location": "L6"
-    },
-    {
-      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_firestore_enterprise_native_mode_on_ios",
-      "label": "Firestore Enterprise Native Mode on iOS",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "firebase-firestore/SKILL.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "firestore enterprise native mode on ios",
-      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_firebase_firestore_references_enterprise_provisioning",
       "label": "enterprise/provisioning.md",
       "_origin": "ast",
@@ -13505,64 +13565,147 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_add_a_document_with_auto_id_adddoc",
-      "label": "Add a Document with Auto-ID (`addDoc`)",
+      "id": "package",
+      "label": "package.json",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "add a document with auto-id (`adddoc`)",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L44"
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "package.json",
+      "source_file": "package.json",
+      "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_set_a_document_setdoc",
-      "label": "Set a Document (`setDoc`)",
+      "id": "package_description",
+      "label": "description",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "set a document (`setdoc`)",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L26"
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "description",
+      "source_file": "package.json",
+      "source_location": "L5"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_transactions",
-      "label": "Transactions",
+      "id": "package_engines",
+      "label": "engines",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "transactions",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L73"
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "engines",
+      "source_file": "package.json",
+      "source_location": "L13"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_update_a_document_updatedoc",
-      "label": "Update a Document (`updateDoc`)",
+      "id": "package_engines_node",
+      "label": "node",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "update a document (`updatedoc`)",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L58"
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "node",
+      "source_file": "package.json",
+      "source_location": "L14"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_writing_data",
-      "label": "Writing Data",
+      "id": "package_main",
+      "label": "main",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "writing data",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L24"
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "main",
+      "source_file": "package.json",
+      "source_location": "L6"
+    },
+    {
+      "id": "package_name",
+      "label": "name",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "name",
+      "source_file": "package.json",
+      "source_location": "L2"
+    },
+    {
+      "id": "package_private",
+      "label": "private",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "private",
+      "source_file": "package.json",
+      "source_location": "L4"
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "scripts",
+      "source_file": "package.json",
+      "source_location": "L7"
+    },
+    {
+      "id": "package_scripts_build",
+      "label": "build",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "build",
+      "source_file": "package.json",
+      "source_location": "L9"
+    },
+    {
+      "id": "package_scripts_dev",
+      "label": "dev",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "dev",
+      "source_file": "package.json",
+      "source_location": "L11"
+    },
+    {
+      "id": "package_scripts_postinstall",
+      "label": "postinstall",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "postinstall",
+      "source_file": "package.json",
+      "source_location": "L8"
+    },
+    {
+      "id": "package_scripts_start",
+      "label": "start",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "start",
+      "source_file": "package.json",
+      "source_location": "L10"
+    },
+    {
+      "id": "package_version",
+      "label": "version",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "package.json",
+      "file_type": "code",
+      "norm_label": "version",
+      "source_file": "package.json",
+      "source_location": "L3"
     },
     {
       "id": "server_config_db",
@@ -25701,6 +25844,138 @@
       "weight": 1.0
     },
     {
+      "source": "package",
+      "target": "package_engines",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "package",
+      "target": "package_name",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "package",
+      "target": "package_version",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "package",
+      "target": "package_private",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "package",
+      "target": "package_description",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "package",
+      "target": "package_main",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "package",
+      "target": "package_scripts",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "package_engines",
+      "target": "package_engines_node",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "package_scripts",
+      "target": "package_scripts_start",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "package_scripts",
+      "target": "package_scripts_dev",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "package_scripts",
+      "target": "package_scripts_postinstall",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "package_scripts",
+      "target": "package_scripts_build",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "package.json",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
       "source": "server_config_db",
       "target": "server_config_db_promisepool",
       "relation": "contains",
@@ -28311,5 +28586,5 @@
       "source_file": "client/imgs/3fromages.jpg"
     }
   ],
-  "built_at_commit": "81972a81dd41bf5798ec0852b9d569a67f65240f"
+  "built_at_commit": "794117c24572ae639fad54ccbf400f7e54e51233"
 }

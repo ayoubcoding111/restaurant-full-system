@@ -13,8 +13,8 @@
   },
   "ayoub.session.sql": {
     "mtime": 1789179720.8724802,
-    "seen": 1789259913.74177,
-    "ast_hash": "",
+    "seen": 1791670911.4437308,
+    "ast_hash": "1d2c4076079f541f9b11e1d07ded22fc",
     "semantic_hash": ""
   },
   "client/admin.js": {
@@ -90,9 +90,9 @@
     "semantic_hash": "7972b379091e5193309cd297b48742c8"
   },
   "server/database.sql": {
-    "mtime": 1789216174.138216,
-    "seen": 1789253900.961309,
-    "ast_hash": "",
+    "mtime": 1789259249.1634123,
+    "seen": 1791670911.4437876,
+    "ast_hash": "21ab7b8f8e8414af888d94b0a8c4b7a1",
     "semantic_hash": ""
   },
   "server/package.json": {
@@ -102,9 +102,9 @@
     "semantic_hash": "c7a0f1f91bd0d0fc6505b84ec30fdad6"
   },
   "server/server.js": {
-    "mtime": 1789259300.1270764,
-    "seen": 1789259304.890489,
-    "ast_hash": "ae07f65e8b499957512970131f48d8cc",
+    "mtime": 1791668600.5961828,
+    "seen": 1791669294.5614977,
+    "ast_hash": "96a950bb80f82f3224d483610bd275f1",
     "semantic_hash": ""
   },
   "skills-lock.json": {
@@ -288,9 +288,9 @@
     "semantic_hash": ""
   },
   "client/admin-app.js": {
-    "mtime": 1791668201.0619118,
-    "seen": 1791668218.3525052,
-    "ast_hash": "51d0d316e19385d2670d3d709baf2480",
+    "mtime": 1791668625.1363685,
+    "seen": 1791669294.5588286,
+    "ast_hash": "c1098ffcc588d580ed0439cee8ff6018",
     "semantic_hash": ""
   },
   "client/admin.html": {

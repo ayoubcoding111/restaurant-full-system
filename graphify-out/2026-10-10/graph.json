@@ -55,7 +55,7 @@
       "file_type": "code",
       "norm_label": "attachoptions()",
       "source_file": "server/server.js",
-      "source_location": "L1072"
+      "source_location": "L1076"
     },
     {
       "id": "server_server_attachratings",
@@ -67,7 +67,7 @@
       "file_type": "code",
       "norm_label": "attachratings()",
       "source_file": "server/server.js",
-      "source_location": "L1085"
+      "source_location": "L1089"
     },
     {
       "id": "server_server_generatetoken",
@@ -91,7 +91,7 @@
       "file_type": "code",
       "norm_label": "getclientip()",
       "source_file": "server/server.js",
-      "source_location": "L183"
+      "source_location": "L184"
     },
     {
       "id": "server_server_invalidateusersessions",
@@ -103,7 +103,7 @@
       "file_type": "code",
       "norm_label": "invalidateusersessions()",
       "source_file": "server/server.js",
-      "source_location": "L168"
+      "source_location": "L169"
     },
     {
       "id": "server_server_isaccountlocked",
@@ -115,7 +115,7 @@
       "file_type": "code",
       "norm_label": "isaccountlocked()",
       "source_file": "server/server.js",
-      "source_location": "L224"
+      "source_location": "L225"
     },
     {
       "id": "server_server_isipbanned",
@@ -127,7 +127,7 @@
       "file_type": "code",
       "norm_label": "isipbanned()",
       "source_file": "server/server.js",
-      "source_location": "L235"
+      "source_location": "L236"
     },
     {
       "id": "server_server_maskaddress",
@@ -139,7 +139,7 @@
       "file_type": "code",
       "norm_label": "maskaddress()",
       "source_file": "server/server.js",
-      "source_location": "L200"
+      "source_location": "L201"
     },
     {
       "id": "server_server_maskname",
@@ -151,7 +151,7 @@
       "file_type": "code",
       "norm_label": "maskname()",
       "source_file": "server/server.js",
-      "source_location": "L192"
+      "source_location": "L193"
     },
     {
       "id": "server_server_maskphone",
@@ -163,7 +163,7 @@
       "file_type": "code",
       "norm_label": "maskphone()",
       "source_file": "server/server.js",
-      "source_location": "L206"
+      "source_location": "L207"
     },
     {
       "id": "server_server_recordloginattempt",
@@ -175,7 +175,7 @@
       "file_type": "code",
       "norm_label": "recordloginattempt()",
       "source_file": "server/server.js",
-      "source_location": "L245"
+      "source_location": "L246"
     },
     {
       "id": "server_server_safeequal",
@@ -187,7 +187,7 @@
       "file_type": "code",
       "norm_label": "safeequal()",
       "source_file": "server/server.js",
-      "source_location": "L214"
+      "source_location": "L215"
     },
     {
       "id": "server_server_bootstrapadmin",
@@ -199,7 +199,7 @@
       "file_type": "code",
       "norm_label": "bootstrapadmin()",
       "source_file": "server/server.js",
-      "source_location": "L1577"
+      "source_location": "L1581"
     },
     {
       "id": "server_server_migratedb",
@@ -211,7 +211,7 @@
       "file_type": "code",
       "norm_label": "migratedb()",
       "source_file": "server/server.js",
-      "source_location": "L1336"
+      "source_location": "L1340"
     },
     {
       "id": "server_server_purgedeliveredorders",
@@ -223,7 +223,7 @@
       "file_type": "code",
       "norm_label": "purgedeliveredorders()",
       "source_file": "server/server.js",
-      "source_location": "L1609"
+      "source_location": "L1613"
     },
     {
       "id": "server_server_start",
@@ -235,7 +235,7 @@
       "file_type": "code",
       "norm_label": "start()",
       "source_file": "server/server.js",
-      "source_location": "L1671"
+      "source_location": "L1675"
     },
     {
       "id": "server_server_authenticatetoken",
@@ -271,7 +271,7 @@
       "file_type": "code",
       "norm_label": "requireadmin()",
       "source_file": "server/server.js",
-      "source_location": "L157"
+      "source_location": "L158"
     },
     {
       "id": "client_admin_app_initadminforms",
@@ -283,7 +283,7 @@
       "file_type": "code",
       "norm_label": "initadminforms()",
       "source_file": "client/admin-app.js",
-      "source_location": "L117"
+      "source_location": "L119"
     },
     {
       "id": "client_admin_app_initloginmodal",
@@ -894,7 +894,7 @@
       "source_location": "L22"
     },
     {
-      "id": "server_server_rationale_938",
+      "id": "server_server_rationale_942",
       "label": "NOTE: delivered orders live 24h (grace), then aggregate into",
       "_origin": "ast",
       "community": 1,
@@ -902,7 +902,7 @@
       "file_type": "rationale",
       "norm_label": "note: delivered orders live 24h (grace), then aggregate into",
       "source_file": "server/server.js",
-      "source_location": "L938"
+      "source_location": "L942"
     },
     {
       "id": "agents_skills_anti_koshary_scripts_dep_audit",
@@ -1019,6 +1019,66 @@
       "source_file": ".agents/skills/xcode-project-setup/scripts/xcode_spm_setup/Package.swift",
       "source_location": "L2",
       "type": "module"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_examples_movie_review_app",
+      "label": "Movie Review App",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "Movie Review App",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "movie review app",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L7"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_examples_mutations",
+      "label": "Mutations",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "Movie Review App",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "mutations",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L113"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_examples_queries",
+      "label": "Queries",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "Movie Review App",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "queries",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L71"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_examples_realtime_queries",
+      "label": "Realtime Queries",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "Movie Review App",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "realtime queries",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L149"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_examples_schema",
+      "label": "Schema",
+      "_origin": "ast",
+      "community": 104,
+      "community_name": "Movie Review App",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "schema",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L12"
     },
     {
       "id": "client_staff",
@@ -2267,7 +2327,7 @@
       "file_type": "code",
       "norm_label": "admingate",
       "source_file": "client/admin-app.js",
-      "source_location": "L180"
+      "source_location": "L182"
     },
     {
       "id": "client_auth",
@@ -5624,7 +5684,7 @@
       "label": "examples.md",
       "_origin": "ast",
       "community": 40,
-      "community_name": "Native SQL Examples",
+      "community_name": "Examples",
       "file_type": "document",
       "node_kind": "page",
       "norm_label": "examples.md",
@@ -5632,59 +5692,11 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_data_connect_examples_advanced_aggregation_with_rank",
-      "label": "Advanced aggregation with RANK",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "advanced aggregation with rank",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L508"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_advanced_cte_with_upserts_atomic_get_or_create",
-      "label": "Advanced CTE with upserts (atomic get-or-create)",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "advanced cte with upserts (atomic get-or-create)",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L544"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_basic_select_with_field_aliasing",
-      "label": "Basic SELECT with field aliasing",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "basic select with field aliasing",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L476"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_basic_update",
-      "label": "Basic UPDATE",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "basic update",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L493"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_examples_blog_with_permissions",
       "label": "Blog with Permissions",
       "_origin": "ast",
       "community": 40,
-      "community_name": "Native SQL Examples",
+      "community_name": "Examples",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "blog with permissions",
@@ -5696,7 +5708,7 @@
       "label": "E-Commerce Store",
       "_origin": "ast",
       "community": 40,
-      "community_name": "Native SQL Examples",
+      "community_name": "Examples",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "e-commerce store",
@@ -5708,7 +5720,7 @@
       "label": "Examples",
       "_origin": "ast",
       "community": 40,
-      "community_name": "Native SQL Examples",
+      "community_name": "Examples",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "examples",
@@ -5716,59 +5728,11 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_data_connect_examples_movie_review_app",
-      "label": "Movie Review App",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "movie review app",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L7"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_multi_statement_transactions",
-      "label": "Multi-statement Transactions",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "multi-statement transactions",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L581"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_mutations",
-      "label": "Mutations",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "mutations",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L113"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_native_sql_examples",
-      "label": "Native SQL Examples",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "native sql examples",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L471"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_examples_operations",
       "label": "Operations",
       "_origin": "ast",
       "community": 40,
-      "community_name": "Native SQL Examples",
+      "community_name": "Examples",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "operations",
@@ -5780,7 +5744,7 @@
       "label": "Operations with Role Checks",
       "_origin": "ast",
       "community": 40,
-      "community_name": "Native SQL Examples",
+      "community_name": "Examples",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "operations with role checks",
@@ -5788,47 +5752,11 @@
       "source_location": "L406"
     },
     {
-      "id": "agents_skills_firebase_data_connect_examples_queries",
-      "label": "Queries",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "queries",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L71"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_realtime_queries",
-      "label": "Realtime Queries",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "realtime queries",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L149"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_schema",
-      "label": "Schema",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "schema",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L12"
-    },
-    {
       "id": "agents_skills_firebase_data_connect_examples_schema_244",
       "label": "Schema",
       "_origin": "ast",
       "community": 40,
-      "community_name": "Native SQL Examples",
+      "community_name": "Examples",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "schema",
@@ -5840,36 +5768,12 @@
       "label": "Schema",
       "_origin": "ast",
       "community": 40,
-      "community_name": "Native SQL Examples",
+      "community_name": "Examples",
       "file_type": "document",
       "node_kind": "heading",
       "norm_label": "schema",
       "source_file": ".agents/skills/firebase-data-connect/examples.md",
       "source_location": "L356"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_update_with_returning_and_auth_context",
-      "label": "UPDATE with RETURNING and Auth Context",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "update with returning and auth context",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L528"
-    },
-    {
-      "id": "agents_skills_firebase_data_connect_examples_use_of_extensions_e_g_postgis_for_geospatial_data",
-      "label": "Use of extensions (e.g. PostGIS for geospatial data)",
-      "_origin": "ast",
-      "community": 40,
-      "community_name": "Native SQL Examples",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "use of extensions (e.g. postgis for geospatial data)",
-      "source_file": ".agents/skills/firebase-data-connect/examples.md",
-      "source_location": "L600"
     },
     {
       "id": "agents_skills_firebase_data_connect_reference_schema",
@@ -9600,6 +9504,18 @@
       "source_location": "L114"
     },
     {
+      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup",
+      "label": "enterprise/ios_setup.md",
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "\u26d4\ufe0f CRITICAL RULE: NO INLINE INITIALIZATION \u26d4\ufe0f",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "enterprise/ios_setup.md",
+      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
+      "source_location": "L1"
+    },
+    {
       "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_1_import_and_initialize",
       "label": "1. Import and Initialize",
       "_origin": "ast",
@@ -9660,6 +9576,18 @@
       "source_location": "L135"
     },
     {
+      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_critical_rule_no_firebasefirestoreswift",
+      "label": "\u26d4\ufe0f CRITICAL RULE: NO FirebaseFirestoreSwift \u26d4\ufe0f",
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "\u26d4\ufe0f CRITICAL RULE: NO INLINE INITIALIZATION \u26d4\ufe0f",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "\u26d4\ufe0f critical rule: no firebasefirestoreswift \u26d4\ufe0f",
+      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
+      "source_location": "L6"
+    },
+    {
       "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_critical_rule_no_inline_initialization",
       "label": "\u26d4\ufe0f CRITICAL RULE: NO INLINE INITIALIZATION \u26d4\ufe0f",
       "_origin": "ast",
@@ -9682,6 +9610,18 @@
       "norm_label": "examples",
       "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
       "source_location": "L116"
+    },
+    {
+      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_firestore_enterprise_native_mode_on_ios",
+      "label": "Firestore Enterprise Native Mode on iOS",
+      "_origin": "ast",
+      "community": 62,
+      "community_name": "\u26d4\ufe0f CRITICAL RULE: NO INLINE INITIALIZATION \u26d4\ufe0f",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "firestore enterprise native mode on ios",
+      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
+      "source_location": "L1"
     },
     {
       "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_initialization",
@@ -9900,6 +9840,18 @@
       "source_location": "L1"
     },
     {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_add_a_document_with_auto_id_adddoc",
+      "label": "Add a Document with Auto-ID (`addDoc`)",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "add a document with auto-id (`adddoc`)",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L44"
+    },
+    {
       "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_firestore_web_sdk_usage_guide",
       "label": "Firestore Web SDK Usage Guide",
       "_origin": "ast",
@@ -10020,6 +9972,18 @@
       "source_location": "L129"
     },
     {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_set_a_document_setdoc",
+      "label": "Set a Document (`setDoc`)",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "set a document (`setdoc`)",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L26"
+    },
+    {
       "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_simple_and_compound_queries",
       "label": "Simple and Compound Queries",
       "_origin": "ast",
@@ -10030,6 +9994,42 @@
       "norm_label": "simple and compound queries",
       "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
       "source_location": "L167"
+    },
+    {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_transactions",
+      "label": "Transactions",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "transactions",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L73"
+    },
+    {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_update_a_document_updatedoc",
+      "label": "Update a Document (`updateDoc`)",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "update a document (`updatedoc`)",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L58"
+    },
+    {
+      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_writing_data",
+      "label": "Writing Data",
+      "_origin": "ast",
+      "community": 64,
+      "community_name": "Firestore Web SDK Usage Guide",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "writing data",
+      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
+      "source_location": "L24"
     },
     {
       "id": "agents_skills_firebase_firestore_references_standard_ios_setup",
@@ -12072,42 +12072,6 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup",
-      "label": "enterprise/ios_setup.md",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "firebase-firestore/SKILL.md",
-      "file_type": "document",
-      "node_kind": "page",
-      "norm_label": "enterprise/ios_setup.md",
-      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
-      "source_location": "L1"
-    },
-    {
-      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_critical_rule_no_firebasefirestoreswift",
-      "label": "\u26d4\ufe0f CRITICAL RULE: NO FirebaseFirestoreSwift \u26d4\ufe0f",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "firebase-firestore/SKILL.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "\u26d4\ufe0f critical rule: no firebasefirestoreswift \u26d4\ufe0f",
-      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
-      "source_location": "L6"
-    },
-    {
-      "id": "agents_skills_firebase_firestore_references_enterprise_ios_setup_firestore_enterprise_native_mode_on_ios",
-      "label": "Firestore Enterprise Native Mode on iOS",
-      "_origin": "ast",
-      "community": 79,
-      "community_name": "firebase-firestore/SKILL.md",
-      "file_type": "document",
-      "node_kind": "heading",
-      "norm_label": "firestore enterprise native mode on ios",
-      "source_file": ".agents/skills/firebase-firestore/references/enterprise/ios_setup.md",
-      "source_location": "L1"
-    },
-    {
       "id": "agents_skills_firebase_firestore_references_enterprise_provisioning",
       "label": "enterprise/provisioning.md",
       "_origin": "ast",
@@ -13505,64 +13469,100 @@
       "source_location": "L1"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_add_a_document_with_auto_id_adddoc",
-      "label": "Add a Document with Auto-ID (`addDoc`)",
+      "id": "agents_skills_firebase_data_connect_examples_advanced_aggregation_with_rank",
+      "label": "Advanced aggregation with RANK",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
+      "community_name": "Native SQL Examples",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "add a document with auto-id (`adddoc`)",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L44"
+      "norm_label": "advanced aggregation with rank",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L508"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_set_a_document_setdoc",
-      "label": "Set a Document (`setDoc`)",
+      "id": "agents_skills_firebase_data_connect_examples_advanced_cte_with_upserts_atomic_get_or_create",
+      "label": "Advanced CTE with upserts (atomic get-or-create)",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
+      "community_name": "Native SQL Examples",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "set a document (`setdoc`)",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L26"
+      "norm_label": "advanced cte with upserts (atomic get-or-create)",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L544"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_transactions",
-      "label": "Transactions",
+      "id": "agents_skills_firebase_data_connect_examples_basic_select_with_field_aliasing",
+      "label": "Basic SELECT with field aliasing",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
+      "community_name": "Native SQL Examples",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "transactions",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L73"
+      "norm_label": "basic select with field aliasing",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L476"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_update_a_document_updatedoc",
-      "label": "Update a Document (`updateDoc`)",
+      "id": "agents_skills_firebase_data_connect_examples_basic_update",
+      "label": "Basic UPDATE",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
+      "community_name": "Native SQL Examples",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "update a document (`updatedoc`)",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L58"
+      "norm_label": "basic update",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L493"
     },
     {
-      "id": "agents_skills_firebase_firestore_references_standard_web_sdk_usage_writing_data",
-      "label": "Writing Data",
+      "id": "agents_skills_firebase_data_connect_examples_multi_statement_transactions",
+      "label": "Multi-statement Transactions",
       "_origin": "ast",
       "community": 97,
-      "community_name": "Writing Data",
+      "community_name": "Native SQL Examples",
       "file_type": "document",
       "node_kind": "heading",
-      "norm_label": "writing data",
-      "source_file": ".agents/skills/firebase-firestore/references/standard/web_sdk_usage.md",
-      "source_location": "L24"
+      "norm_label": "multi-statement transactions",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L581"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_examples_native_sql_examples",
+      "label": "Native SQL Examples",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "Native SQL Examples",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "native sql examples",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L471"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_examples_update_with_returning_and_auth_context",
+      "label": "UPDATE with RETURNING and Auth Context",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "Native SQL Examples",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "update with returning and auth context",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L528"
+    },
+    {
+      "id": "agents_skills_firebase_data_connect_examples_use_of_extensions_e_g_postgis_for_geospatial_data",
+      "label": "Use of extensions (e.g. PostGIS for geospatial data)",
+      "_origin": "ast",
+      "community": 97,
+      "community_name": "Native SQL Examples",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "use of extensions (e.g. postgis for geospatial data)",
+      "source_file": ".agents/skills/firebase-data-connect/examples.md",
+      "source_location": "L600"
     },
     {
       "id": "server_config_db",
@@ -14968,7 +14968,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/server.js",
-      "source_location": "L158",
+      "source_location": "L159",
       "weight": 1.0
     },
     {
@@ -14980,7 +14980,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/server.js",
-      "source_location": "L1672",
+      "source_location": "L1676",
       "weight": 1.0
     },
     {
@@ -14992,7 +14992,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/server.js",
-      "source_location": "L1673",
+      "source_location": "L1677",
       "weight": 1.0
     },
     {
@@ -15004,7 +15004,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/server.js",
-      "source_location": "L1674",
+      "source_location": "L1678",
       "weight": 1.0
     },
     {
@@ -15016,7 +15016,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "client/admin-app.js",
-      "source_location": "L121",
+      "source_location": "L123",
       "weight": 1.0
     },
     {
@@ -15040,7 +15040,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "client/admin-app.js",
-      "source_location": "L21",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -15233,54 +15233,6 @@
       "context": "import",
       "source_file": "server/package.json",
       "source_location": "L28",
-      "weight": 1.0
-    },
-    {
-      "source": "server_server",
-      "target": "server_config_mailer_sendpasswordresetemail",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "server/server.js",
-      "source_location": "L11",
-      "weight": 1.0
-    },
-    {
-      "source": "server_server",
-      "target": "client_validators_isvaliddzphone",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "server/server.js",
-      "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "server_server",
-      "target": "client_validators_isvalidemail",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "server/server.js",
-      "source_location": "L14",
-      "weight": 1.0
-    },
-    {
-      "source": "server_server",
-      "target": "client_validators_normalizedzphone",
-      "relation": "imports",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "import",
-      "source_file": "server/server.js",
-      "source_location": "L14",
       "weight": 1.0
     },
     {
@@ -24685,7 +24637,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/admin-app.js",
-      "source_location": "L117",
+      "source_location": "L119",
       "weight": 1.0
     },
     {
@@ -24696,7 +24648,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "client/admin-app.js",
-      "source_location": "L180",
+      "source_location": "L182",
       "weight": 1.0
     },
     {
@@ -26027,7 +25979,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1072",
+      "source_location": "L1076",
       "weight": 1.0
     },
     {
@@ -26038,7 +25990,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1085",
+      "source_location": "L1089",
       "weight": 1.0
     },
     {
@@ -26093,7 +26045,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1336",
+      "source_location": "L1340",
       "weight": 1.0
     },
     {
@@ -26115,7 +26067,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1577",
+      "source_location": "L1581",
       "weight": 1.0
     },
     {
@@ -26137,7 +26089,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1609",
+      "source_location": "L1613",
       "weight": 1.0
     },
     {
@@ -26148,7 +26100,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1671",
+      "source_location": "L1675",
       "weight": 1.0
     },
     {
@@ -26159,7 +26111,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L168",
+      "source_location": "L169",
       "weight": 1.0
     },
     {
@@ -26170,7 +26122,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L183",
+      "source_location": "L184",
       "weight": 1.0
     },
     {
@@ -26181,7 +26133,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L192",
+      "source_location": "L193",
       "weight": 1.0
     },
     {
@@ -26203,7 +26155,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L200",
+      "source_location": "L201",
       "weight": 1.0
     },
     {
@@ -26214,7 +26166,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L206",
+      "source_location": "L207",
       "weight": 1.0
     },
     {
@@ -26236,7 +26188,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L214",
+      "source_location": "L215",
       "weight": 1.0
     },
     {
@@ -26258,7 +26210,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L224",
+      "source_location": "L225",
       "weight": 1.0
     },
     {
@@ -26269,7 +26221,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L235",
+      "source_location": "L236",
       "weight": 1.0
     },
     {
@@ -26280,7 +26232,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L245",
+      "source_location": "L246",
       "weight": 1.0
     },
     {
@@ -26471,14 +26423,14 @@
       "weight": 1.0
     },
     {
-      "source": "server_server_rationale_938",
+      "source": "server_server_rationale_942",
       "target": "server_server",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L938",
+      "source_location": "L942",
       "weight": 1.0
     },
     {
@@ -27328,7 +27280,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "server/server.js",
-      "source_location": "L424",
+      "source_location": "L434",
       "weight": 1.0
     },
     {
@@ -27340,7 +27292,7 @@
       "confidence_score": 0.85,
       "context": "argument",
       "source_file": "server/server.js",
-      "source_location": "L448",
+      "source_location": "L452",
       "weight": 1.0
     },
     {
@@ -28311,5 +28263,5 @@
       "source_file": "client/imgs/3fromages.jpg"
     }
   ],
-  "built_at_commit": "81972a81dd41bf5798ec0852b9d569a67f65240f"
+  "built_at_commit": "794117c24572ae639fad54ccbf400f7e54e51233"
 }
