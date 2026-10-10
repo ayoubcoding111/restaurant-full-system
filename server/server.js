@@ -147,6 +147,7 @@ function authenticateToken(req, res, next) {
     }
     const session = sessions.get(token);
     if (!session) {
+        res.clearCookie(AUTH_COOKIE);
         return res.status(401).json({ success: false, message: 'Invalid or expired token' });
     }
     req.user = session;
@@ -421,8 +422,11 @@ app.post('/api/auth/reset-password', authLimiter, async (req, res) => {
     }
 });
 
-app.post('/api/auth/logout', authenticateToken, (req, res) => {
-    sessions.delete(req.token);
+app.post('/api/auth/logout', (req, res) => {
+    let token = req.headers.authorization?.startsWith('Bearer ')
+        ? req.headers.authorization.split(' ')[1]
+        : parseCookie(req.headers.cookie, AUTH_COOKIE);
+    if (token) sessions.delete(token);
     res.clearCookie(AUTH_COOKIE);
     res.json({ success: true });
 });

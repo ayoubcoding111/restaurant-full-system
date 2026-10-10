@@ -2,6 +2,7 @@
 // Auth Module — token-based, role-aware
 // ============================================
 const Auth = {
+    TOKEN_KEY: 'auth_token',
     ROLE_KEY: 'auth_role',
     NAME_KEY: 'auth_name',
 
@@ -10,8 +11,7 @@ const Auth = {
     },
 
     // ---- Token helpers ----
-    // Auth token lives in an httpOnly cookie set by the server — invisible to JS.
-    // Role and name are stored in localStorage for UI rendering only.
+    getToken() { return localStorage.getItem(this.TOKEN_KEY); },
     getRole() { return localStorage.getItem(this.ROLE_KEY); },
     getName() { return localStorage.getItem(this.NAME_KEY); },
     isLoggedIn() { return !!this.getRole(); },
@@ -19,25 +19,35 @@ const Auth = {
 
     // ---- API calls ----
     async login(identifier, password) {
-        const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ identifier, username: identifier, password })
-        });
-        const data = await res.json().catch(() => ({}));
-        if (data.success) {
-            // Token is set as an httpOnly cookie by the server — do not store in localStorage.
-            localStorage.setItem(this.ROLE_KEY, data.role);
-            localStorage.setItem(this.NAME_KEY, data.full_name || data.username);
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ identifier, username: identifier, password })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (data.success) {
+                if (data.token) localStorage.setItem(this.TOKEN_KEY, data.token);
+                localStorage.setItem(this.ROLE_KEY, data.role);
+                localStorage.setItem(this.NAME_KEY, data.full_name || data.username);
+            }
+            data._status = res.status;
+            return data;
+        } catch (error) {
+            console.error('Login request failed:', error);
+            return {
+                success: false,
+                message: 'Cannot connect to backend server. Ensure it is running on port 3000.'
+            };
         }
-        data._status = res.status;
-        return data;
     },
 
     async forgotPassword(identifier) {
         const res = await fetch('/api/auth/forgot-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
             body: JSON.stringify({ email: identifier, identifier, username: identifier })
         });
         return await res.json();
@@ -47,6 +57,7 @@ const Auth = {
         const res = await fetch('/api/auth/reset-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
             body: JSON.stringify({ token, password })
         });
         return await res.json();
@@ -54,19 +65,24 @@ const Auth = {
 
     async fetchMe() {
         try {
-            const res = await fetch('/api/auth/me', { credentials: 'same-origin' });
+            const headers = {};
+            const token = this.getToken();
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+            const res = await fetch('/api/auth/me', { headers, credentials: 'same-origin' });
             if (!res.ok) return null;
             const data = await res.json();
             return data.success ? data.user : null;
         } catch { return null; }
     },
 
-    // Authenticated fetch: cookies are sent automatically by the browser.
-    // If the session is dead (server restarted, password changed…), log out
-    // so the user gets the login screen instead of cryptic "Failed" errors.
+    // Authenticated fetch: cookies sent automatically, plus Bearer token fallback.
     async authFetch(url, options = {}) {
+        const headers = { ...options.headers };
+        const token = this.getToken();
+        if (token) headers['Authorization'] = `Bearer ${token}`;
         const res = await fetch(url, {
             ...options,
+            headers,
             credentials: 'same-origin'
         });
         if (res.status === 401) {
@@ -89,6 +105,7 @@ const Auth = {
         try {
             await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin' });
         } catch { /* ignore */ }
+        localStorage.removeItem(this.TOKEN_KEY);
         localStorage.removeItem(this.ROLE_KEY);
         localStorage.removeItem(this.NAME_KEY);
         this.renderFooterAuth();

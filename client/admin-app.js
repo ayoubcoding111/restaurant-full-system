@@ -11,17 +11,24 @@ function initLoginModal() {
         hideFormMsg('loginError');
         const identifier = document.getElementById('loginUsername').value.trim();
         const password = document.getElementById('loginPassword').value;
-        const result = await Auth.login(identifier, password);
-        if (result.success) {
-            Auth.hideLoginModal();
-            e.target.reset();
-            AdminGate.enter();
-        } else if (result._status === 429) {
-            showFormMsg('loginError', I18n.t('login_rate'));
-        } else if (result._status === 403) {
-            showFormMsg('loginError', I18n.t('login_banned'));
-        } else {
-            showFormMsg('loginError', result.message || I18n.t('login_bad'));
+        try {
+            const result = await Auth.login(identifier, password);
+            if (result.success) {
+                Auth.hideLoginModal();
+                e.target.reset();
+                AdminGate.setHeader(result);
+                if (result.role === 'admin') AdminGate.showAdmin();
+                else AdminGate.showStaff();
+            } else if (result._status === 429) {
+                showFormMsg('loginError', I18n.t('login_rate'));
+            } else if (result._status === 403) {
+                showFormMsg('loginError', I18n.t('login_banned'));
+            } else {
+                showFormMsg('loginError', result.message || I18n.t('login_bad'));
+            }
+        } catch (err) {
+            console.error('Login submit error:', err);
+            showFormMsg('loginError', 'Failed to connect to server. Please ensure the backend is running.');
         }
     });
 
@@ -190,7 +197,7 @@ const AdminGate = {
         const me = await Auth.fetchMe();
         if (!me) {
             await Auth.logout();
-            location.reload();
+            this.showLogin(true);
             return;
         }
         this.setHeader(me);

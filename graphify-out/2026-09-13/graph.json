@@ -91,7 +91,7 @@
       "file_type": "code",
       "norm_label": "attachoptions()",
       "source_file": "server/server.js",
-      "source_location": "L1071"
+      "source_location": "L1072"
     },
     {
       "id": "server_server_attachratings",
@@ -103,7 +103,7 @@
       "file_type": "code",
       "norm_label": "attachratings()",
       "source_file": "server/server.js",
-      "source_location": "L1084"
+      "source_location": "L1085"
     },
     {
       "id": "server_server_authenticatetoken",
@@ -127,7 +127,7 @@
       "file_type": "code",
       "norm_label": "bootstrapadmin()",
       "source_file": "server/server.js",
-      "source_location": "L1576"
+      "source_location": "L1577"
     },
     {
       "id": "server_server_generatetoken",
@@ -235,7 +235,7 @@
       "file_type": "code",
       "norm_label": "migratedb()",
       "source_file": "server/server.js",
-      "source_location": "L1335"
+      "source_location": "L1336"
     },
     {
       "id": "server_server_parsecookie",
@@ -259,7 +259,7 @@
       "file_type": "code",
       "norm_label": "purgedeliveredorders()",
       "source_file": "server/server.js",
-      "source_location": "L1608"
+      "source_location": "L1609"
     },
     {
       "id": "server_server_recordloginattempt",
@@ -307,7 +307,7 @@
       "file_type": "code",
       "norm_label": "start()",
       "source_file": "server/server.js",
-      "source_location": "L1670"
+      "source_location": "L1671"
     },
     {
       "id": "client_ui_askconfirm",
@@ -825,7 +825,7 @@
       "source_location": "L22"
     },
     {
-      "id": "server_server_rationale_937",
+      "id": "server_server_rationale_938",
       "label": "NOTE: delivered orders live 24h (grace), then aggregate into",
       "_origin": "ast",
       "community": 1,
@@ -833,7 +833,7 @@
       "file_type": "rationale",
       "norm_label": "note: delivered orders live 24h (grace), then aggregate into",
       "source_file": "server/server.js",
-      "source_location": "L937"
+      "source_location": "L938"
     },
     {
       "id": "agents_skills_anti_koshary_scripts_dep_audit",
@@ -3782,7 +3782,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/server.js",
-      "source_location": "L1671",
+      "source_location": "L1672",
       "weight": 1.0
     },
     {
@@ -3794,7 +3794,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/server.js",
-      "source_location": "L1672",
+      "source_location": "L1673",
       "weight": 1.0
     },
     {
@@ -3806,7 +3806,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "server/server.js",
-      "source_location": "L1673",
+      "source_location": "L1674",
       "weight": 1.0
     },
     {
@@ -5490,7 +5490,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1071",
+      "source_location": "L1072",
       "weight": 1.0
     },
     {
@@ -5501,7 +5501,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1084",
+      "source_location": "L1085",
       "weight": 1.0
     },
     {
@@ -5556,7 +5556,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1335",
+      "source_location": "L1336",
       "weight": 1.0
     },
     {
@@ -5578,7 +5578,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1576",
+      "source_location": "L1577",
       "weight": 1.0
     },
     {
@@ -5600,7 +5600,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1608",
+      "source_location": "L1609",
       "weight": 1.0
     },
     {
@@ -5611,7 +5611,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L1670",
+      "source_location": "L1671",
       "weight": 1.0
     },
     {
@@ -5934,14 +5934,14 @@
       "weight": 1.0
     },
     {
-      "source": "server_server_rationale_937",
+      "source": "server_server_rationale_938",
       "target": "server_server",
       "relation": "rationale_for",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "server/server.js",
-      "source_location": "L937",
+      "source_location": "L938",
       "weight": 1.0
     },
     {
