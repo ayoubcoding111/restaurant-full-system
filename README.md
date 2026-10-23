@@ -37,7 +37,11 @@ The public site (v9, "Ember & Flour") and the staff portal, captured from the lo
 
 ### Staff & admin portal
 
-![Staff and admin login](docs/screenshots/admin-login-desktop.png)
+| Login | Orders (live kitchen board) |
+|---|---|
+| ![Staff and admin login](docs/screenshots/admin-login-desktop.png) | ![Orders board](docs/screenshots/admin-orders-desktop.png) |
+
+![Analytics](docs/screenshots/admin-analytics-desktop.png)
 
 ## Table of Contents
 
