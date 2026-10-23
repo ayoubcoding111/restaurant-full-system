@@ -12,39 +12,21 @@ const AppState = {
 };
 
 // ============================================
-// Scroll Reveal Animation
+// Scroll reveals now live in motion.js (GSAP + IntersectionObserver).
+// This shim keeps older call sites harmless.
 // ============================================
 const ScrollReveal = {
     observer: null,
-
-    init() {
-        if (!('IntersectionObserver' in window)) {
-            // Fallback: show everything immediately
-            document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
-            return;
-        }
-
-        this.observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    this.observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.15,
-            rootMargin: '0px 0px -40px 0px'
-        });
-
-        this.observe();
-    },
-
-    observe() {
-        document.querySelectorAll('.reveal:not(.active)').forEach(el => {
-            this.observer.observe(el);
-        });
-    }
+    init() {},
+    observe() {}
 };
+
+// Scroll helper: Lenis-aware when motion.js is present.
+function scrollToTarget(target, immediate) {
+    if (window.Motion) return Motion.scrollTo(target, { immediate });
+    const top = typeof target === 'number' ? target : target.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top, behavior: immediate ? 'auto' : 'smooth' });
+}
 
 // ============================================
 // API Service
@@ -93,40 +75,62 @@ const Router = {
         const rawHash = location.hash.replace('#', '').replace('/', '');
         const [hashPath] = rawHash.split('?');
         const viewId = this.routes[hashPath] || 'home';
+        const prevView = AppState.currentView;
+        const firstRun = !this._booted;
+        this._booted = true;
         AppState.currentView = viewId;
 
         // NOTE: staff/admin dashboards and password-reset live on /admin now.
         // Unknown hashes fall back to home.
-
-        // Hide all dedicated page sections
-        document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
-
-        // Show/hide main sections
         const isMainView = ['home', 'menu', 'contact'].includes(viewId);
-        document.querySelectorAll('.hero, .about, .menu, .contact, #mainFooter')
-            .forEach(s => s.classList.toggle('hidden', !isMainView));
-
-        // Show the dedicated page section if needed
-        if (!isMainView) {
-            const section = document.getElementById(viewId);
-            if (section) section.classList.remove('hidden');
-        }
-
-        // Render specific views
-        if (viewId === 'cartPage') CartPage.render();
-        if (viewId === 'trackPage' && typeof Track !== 'undefined') Track.render();
-        else if (typeof Track !== 'undefined' && viewId !== 'trackPage') Track.stopPolling();
-
-        // Scroll
+        const wasMainView = ['home', 'menu', 'contact'].includes(prevView);
         const targetEl = document.getElementById(viewId);
-        if (targetEl && isMainView) {
-            setTimeout(() => targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+
+        const swap = () => {
+            // Hide all dedicated page sections
+            document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
+            // Show/hide the main landing view (hero → contact)
+            document.getElementById('mainView')?.classList.toggle('hidden', !isMainView);
+            // Show the dedicated page section if needed
+            if (!isMainView && targetEl) targetEl.classList.remove('hidden');
+
+            // Render specific views
+            if (viewId === 'cartPage') CartPage.render();
+            if (viewId === 'trackPage' && typeof Track !== 'undefined') Track.render();
+            else if (typeof Track !== 'undefined' && viewId !== 'trackPage') Track.stopPolling();
+        };
+
+        // Curtain transition only when switching between "pages" (not anchor scrolls).
+        const switching = !firstRun && (isMainView !== wasMainView || (!isMainView && viewId !== prevView));
+
+        if (switching && window.Motion) {
+            await Motion.transition(() => {
+                swap();
+                if (isMainView && viewId !== 'home' && targetEl) scrollToTarget(targetEl, true);
+                else scrollToTarget(0, true);
+            });
         } else {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            swap();
+            if (isMainView && targetEl) {
+                if (!(firstRun && viewId === 'home')) {
+                    // let layout settle (menu may still be rendering)
+                    setTimeout(() => scrollToTarget(viewId === 'home' ? 0 : targetEl, firstRun), firstRun ? 60 : 0);
+                }
+            } else {
+                scrollToTarget(0, true);
+            }
         }
 
-        // Re-observe any newly visible reveal elements
-        if (ScrollReveal.observer) ScrollReveal.observe();
+        if (window.Motion) {
+            Motion.setRoute(viewId);
+            if (switching || firstRun) Motion.refresh();
+            if (viewId === 'thankYouPage' && prevView !== 'thankYouPage') Motion.celebrate();
+        }
+        if (!isMainView) {
+            // Move focus to the new page heading for keyboard/screen-reader users.
+            const h = targetEl?.querySelector('h2');
+            if (h && !firstRun) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+        }
     }
 };
 
@@ -135,7 +139,7 @@ const Router = {
 // ============================================
 const ThemeManager = {
     init() {
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         this.setTheme(savedTheme);
         document.getElementById('themeSwitch').addEventListener('change', (e) => {
             this.setTheme(e.target.checked ? 'dark' : 'light');
@@ -145,6 +149,8 @@ const ThemeManager = {
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
         document.getElementById('themeSwitch').checked = theme === 'dark';
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#100d0b' : '#f3ece1');
     }
 };
 
@@ -181,11 +187,16 @@ const MenuDisplay = {
             if (result.success) {
                 AppState.allItems = result.data;
                 this.resetAndRender();
+                Signature.render(result.data);
             }
         } catch (error) {
             console.error('Error loading items:', error);
-            document.getElementById('menuGrid').innerHTML =
-                '<p style="text-align: center; color: var(--text-secondary);">Failed to load menu items.</p>';
+            const grid = document.getElementById('menuGrid');
+            grid.innerHTML = `<div class="menu-state"><p>${escAttr(I18n.t('menu_failed'))}</p>
+                <button class="btn btn-ghost" type="button" id="menuRetryBtn">${escAttr(I18n.t('retry'))}</button></div>`;
+            grid.setAttribute('aria-busy', 'false');
+            document.getElementById('menuRetryBtn')?.addEventListener('click', () => this.loadItems());
+            Signature.render([]);
         }
     },
 
@@ -214,7 +225,8 @@ const MenuDisplay = {
         const end = Math.min(start + AppState.itemsPerPage, filtered.length);
 
         if (filtered.length === 0 && start === 0) {
-            menuGrid.innerHTML = '<p style="text-align: center; color: var(--text-secondary); grid-column: 1 / -1;">No items found.</p>';
+            menuGrid.innerHTML = `<div class="menu-state"><p>${escAttr(I18n.t('no_items'))}</p></div>`;
+            menuGrid.setAttribute('aria-busy', 'false');
             this.updateLoadMoreButton(0);
             return;
         }
@@ -231,43 +243,52 @@ const MenuDisplay = {
         AppState.displayedCount = end;
         this.updateLoadMoreButton(filtered.length);
 
-        // Re-observe newly added reveal elements
-        if (ScrollReveal.observer) ScrollReveal.observe();
+        menuGrid.setAttribute('aria-busy', 'false');
+        if (window.Motion) Motion.cards(menuGrid);
     },
 
     renderItemCard(item) {
+        const id = Number(item.id) || 0;
         const desc = item.description
-            ? `<p class="menu-item-desc">${escAttr(item.description)}</p>`
+            ? `<p class="dish-desc" dir="auto">${escAttr(item.description)}</p>`
             : '';
-        const availLabel = item.is_available ? I18n.t('avail') : I18n.t('unavail');
+        // Dictionary labels carry a ✓/✗ glyph; the new design draws its own status dot.
+        const availLabel = String(item.is_available ? I18n.t('avail') : I18n.t('unavail')).replace(/^[✓✗]\s*/, '');
         const hasOpts = (item.options || []).length > 0;
+        const clickable = hasOpts && item.is_available;
+        const cat = categoryLabel(item.category);
+        const disabled = !item.is_available ? 'disabled title="Item not available"' : '';
         return `
-            <div class="menu-item reveal" data-category="${escAttr(item.category)}" data-id="${Number(item.id) || 0}"
-                ${hasOpts && item.is_available ? `onclick="Customizer.open(${Number(item.id) || 0})" style="cursor:pointer" title="${escAttr(I18n.t('customize'))}"` : ''}>
-                <img src="${escAttr(item.image_url)}" alt="${escAttr(item.name)}" class="menu-item-image" onerror="this.src='/images/placeholder.jpg'">
-                <div class="menu-item-content">
-                    <div class="menu-item-header">
-                        <h3 class="menu-item-name">${escAttr(item.name)}</h3>
-                        <span class="menu-item-price">$${parseFloat(item.price).toFixed(2)}</span>
+            <article class="dish ${clickable ? 'is-clickable' : ''} ${item.is_available ? '' : 'is-unavailable'}" data-category="${escAttr(item.category)}" data-id="${id}"
+                ${clickable ? `onclick="Customizer.open(${id})"` : ''}>
+                <div class="dish-media" data-fallback="${escAttr(cat)}">
+                    <img src="${escAttr(item.image_url)}" alt="${escAttr(item.name)}" loading="lazy" decoding="async"
+                        onerror="this.parentNode.classList.add('no-img');this.remove()">
+                    <span class="dish-tag">${escAttr(cat)}</span>
+                    ${(item.rating_count || 0) > 0 ? `<span class="rating-badge" title="${Number(item.rating_count)} reviews">★ ${Number(item.rating_avg).toFixed(1)} <small>(${Number(item.rating_count)})</small></span>` : ''}
+                </div>
+                <div class="dish-body">
+                    <div class="dish-head">
+                        <h3 class="dish-name">${clickable
+                            ? `<button type="button" class="dish-open" onclick="event.stopPropagation();Customizer.open(${id})" aria-haspopup="dialog">${escAttr(item.name)}</button>`
+                            : escAttr(item.name)}</h3>
+                        <span class="dish-price">$${parseFloat(item.price).toFixed(2)}</span>
                     </div>
-                    <span class="menu-item-category">${escAttr(item.category)}</span>
-                    ${(item.rating_count || 0) > 0 ? `<span class="rating-badge" title="${item.rating_count} reviews">★ ${Number(item.rating_avg).toFixed(1)} (${item.rating_count})</span>` : ''}
                     ${desc}
-                    <div class="availability-badge ${item.is_available ? 'available' : 'unavailable'}">
-                        ${availLabel}
+                    <div class="dish-meta">
+                        <span class="availability-badge ${item.is_available ? 'available' : 'unavailable'}">${escAttr(availLabel)}</span>
+                        ${clickable ? `<span class="dish-custom">${escAttr(I18n.t('customizable'))}</span>` : ''}
                     </div>
-                    <div class="menu-item-actions">
-                        <button class="btn btn-add-cart" onclick="event.stopPropagation();MenuDisplay.addToCart(${item.id}, this)"
-                            ${!item.is_available ? 'disabled title="Item not available"' : ''}>
-                            ${Icons.cart} ${I18n.t('add_cart')}
+                    <div class="dish-actions">
+                        <button class="btn btn-primary btn-add-cart" onclick="event.stopPropagation();MenuDisplay.addToCart(${id}, this)" ${disabled}>
+                            ${Icons.cart} <span>${I18n.t('add_cart')}</span>
                         </button>
-                        <button class="btn btn-order-now" onclick="event.stopPropagation();MenuDisplay.orderNow(${item.id}, this)"
-                            ${!item.is_available ? 'disabled title="Item not available"' : ''}>
+                        <button class="btn btn-ghost btn-order-now" onclick="event.stopPropagation();MenuDisplay.orderNow(${id}, this)" ${disabled}>
                             ${I18n.t('order_now')}
                         </button>
                     </div>
                 </div>
-            </div>
+            </article>
         `;
     },
 
@@ -321,14 +342,110 @@ const MenuDisplay = {
     setupFilters() {
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-pressed', 'false');
+                });
                 btn.classList.add('active');
+                btn.setAttribute('aria-pressed', 'true');
                 AppState.currentCategory = btn.dataset.category;
+                this.moveInk();
                 this.resetAndRender();
             });
         });
+        // The ink pill follows the active chip; it re-measures when the row wraps or resizes.
+        const group = document.querySelector('.filter-buttons');
+        if (group && 'ResizeObserver' in window) new ResizeObserver(() => this.moveInk(true)).observe(group);
+        this.moveInk(true);
     },
 
+    moveInk(instant) {
+        const group = document.querySelector('.filter-buttons');
+        const ink = group?.querySelector('.filter-ink');
+        const btn = group?.querySelector('.filter-btn.active');
+        if (!ink || !btn) return;
+        const g = group.getBoundingClientRect();
+        const b = btn.getBoundingClientRect();
+        if (!g.width || !b.width) return;
+        if (instant) group.classList.add('no-anim');
+        const px = (v) => Math.max(0, v).toFixed(1) + 'px';
+        ink.style.clipPath = `inset(${px(b.top - g.top)} ${px(g.right - b.right)} ${px(g.bottom - b.bottom)} ${px(b.left - g.left)} round 999px)`;
+        group.classList.add('has-ink');
+        if (instant) requestAnimationFrame(() => requestAnimationFrame(() => group.classList.remove('no-anim')));
+    }
+};
+
+// Localized category label (falls back to the raw category).
+function categoryLabel(category) {
+    const label = I18n.t({ pizzas: 'f_pizzas', tacos: 'f_tacos', drinks: 'f_drinks', familypack: 'f_family' }[category] || '');
+    return label && !/^f_/.test(label) ? label : category;
+}
+
+// ============================================
+// Signature reel — a few dishes from the live menu, shown big.
+// Hidden when the menu has fewer than three dishes with photos.
+// ============================================
+const Signature = {
+    MAX: 5,
+
+    pick(items) {
+        const rank = { pizzas: 0, tacos: 1, familypack: 2, drinks: 3 };
+        return items
+            .filter(i => i.is_available && i.image_url)
+            .slice()
+            .sort((a, b) => ((rank[a.category] ?? 9) - (rank[b.category] ?? 9)) || ((Number(b.rating_avg) || 0) - (Number(a.rating_avg) || 0)))
+            .slice(0, this.MAX);
+    },
+
+    render(items) {
+        const section = document.getElementById('signature');
+        const track = document.getElementById('reelTrack');
+        if (!section || !track) return;
+        const picks = this.pick(items || []);
+        track.querySelectorAll('.reel-card').forEach(n => n.remove());
+        section.classList.toggle('hidden', picks.length < 3);
+        if (picks.length >= 3) {
+            const html = picks.map((item, i) => this.card(item, i)).join('');
+            const end = track.querySelector('.reel-end');
+            if (end) end.insertAdjacentHTML('beforebegin', html);
+            else track.insertAdjacentHTML('beforeend', html);
+        }
+        if (window.Motion) Motion.reel();
+    },
+
+    card(item, i) {
+        const id = Number(item.id) || 0;
+        const hasOpts = (item.options || []).length > 0;
+        const label = hasOpts ? I18n.t('customize') : I18n.t('add_cart');
+        return `
+            <li class="reel-card">
+                <article class="reel-item" data-id="${id}">
+                    <div class="reel-media" data-cursor="${escAttr(label)}" onclick="Signature.act(${id}, this)">
+                        <img src="${escAttr(item.image_url)}" alt="${escAttr(item.name)}" loading="lazy" decoding="async"
+                            onerror="this.parentNode.classList.add('no-img');this.remove()">
+                    </div>
+                    <div class="reel-body">
+                        <div class="reel-meta">
+                            <span class="reel-index">${String(i + 1).padStart(2, '0')}</span>
+                            <span class="reel-cat">${escAttr(categoryLabel(item.category))}</span>
+                        </div>
+                        <h3 class="reel-name" dir="auto">${escAttr(item.name)}</h3>
+                        ${item.description ? `<p class="reel-desc" dir="auto">${escAttr(item.description)}</p>` : ''}
+                        <div class="reel-row">
+                            <span class="reel-price">$${parseFloat(item.price).toFixed(2)}</span>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="Signature.act(${id}, this)" ${hasOpts ? 'aria-haspopup="dialog"' : ''}><span class="roll">${escAttr(label)}</span></button>
+                        </div>
+                    </div>
+                </article>
+            </li>`;
+    },
+
+    act(id, el) {
+        const item = AppState.allItems.find(i => i.id === id);
+        if (!item || !item.is_available) return;
+        if ((item.options || []).length) Customizer.open(id);
+        else MenuDisplay.addToCart(id, el);
+    }
 };
 
 // ============================================
@@ -407,7 +524,15 @@ const Customizer = {
     },
 
     updateTotal() {
-        document.getElementById('custTotal').textContent = '$' + this.total().toFixed(2);
+        const el = document.getElementById('custTotal');
+        const next = '$' + this.total().toFixed(2);
+        const changed = el.textContent !== next && el.textContent !== '$0.00';
+        el.textContent = next;
+        // Feedback: the new price settles into place (skipped under reduced motion).
+        if (changed && el.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            el.animate([{ transform: 'translateY(-30%)', opacity: 0.35 }, { transform: 'none', opacity: 1 }],
+                { duration: 220, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+        }
     },
 
     async loadReviews(itemId) {
@@ -500,7 +625,12 @@ const CartPage = {
         const footer = document.getElementById('cartFooter');
 
         if (items.length === 0) {
-            container.innerHTML = `<p class="cart-empty">${I18n.t('cart_empty')} <a href="#menu">${I18n.t('cart_browse')}</a></p>`;
+            container.innerHTML = `
+                <div class="cart-empty">
+                    <img class="cart-empty-pizza" src="imgs/art/pizza-cut-520.webp" alt="" width="520" height="520" decoding="async">
+                    <p class="cart-empty-t">${escAttr(I18n.t('cart_empty'))}</p>
+                    <a href="#menu" class="btn btn-primary"><span class="roll">${escAttr(I18n.t('cart_browse'))}</span></a>
+                </div>`;
             footer.classList.add('hidden');
             return;
         }
@@ -510,21 +640,21 @@ const CartPage = {
             const optsLine = escAttr((item.options || []).map(o => I18n.pickOptName(o)).join(', '));
             return `
             <div class="cart-item" data-key="${key}">
-                <img src="${escAttr(item.image_url)}" alt="${escAttr(item.name)}" class="cart-item-image" onerror="this.src='/images/placeholder.jpg'">
+                <img src="${escAttr(item.image_url)}" alt="" class="cart-item-image" loading="lazy" onerror="this.style.visibility='hidden'">
                 <div class="cart-item-info">
+                    <span class="cart-item-cat">${escAttr(item.category)}</span>
                     <h4 class="cart-item-name">${escAttr(item.name)}</h4>
-                    <span class="menu-item-category">${escAttr(item.category)}</span>
                     ${optsLine ? `<p class="cart-item-opts">${optsLine}</p>` : ''}
-                    <p class="cart-item-price">$${item.price.toFixed(2)} each</p>
+                    <p class="cart-item-price">$${item.price.toFixed(2)} ${escAttr(I18n.t('each'))}</p>
                 </div>
                 <div class="cart-item-controls">
                     <div class="qty-controls">
-                        <button class="qty-btn" onclick="CartPage.changeQty('${key}', -1)">−</button>
-                        <span class="qty-value">${item.quantity}</span>
-                        <button class="qty-btn" onclick="CartPage.changeQty('${key}', 1)">+</button>
+                        <button class="qty-btn" onclick="CartPage.changeQty('${key}', -1)" aria-label="${escAttr(I18n.t('qty_minus'))}">−</button>
+                        <span class="qty-value" aria-live="polite">${item.quantity}</span>
+                        <button class="qty-btn" onclick="CartPage.changeQty('${key}', 1)" aria-label="${escAttr(I18n.t('qty_plus'))}">+</button>
                     </div>
                     <p class="cart-item-subtotal">$${(item.price * item.quantity).toFixed(2)}</p>
-                    <button class="btn-remove" onclick="CartPage.removeItem('${key}')">✕</button>
+                    <button class="btn-remove" onclick="CartPage.removeItem('${key}')" aria-label="${escAttr(I18n.t('remove'))}"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
                 </div>
             </div>
         `; }).join('');
@@ -741,6 +871,11 @@ function flyToCart(fromEl) {
     try {
         const target = document.getElementById('cartLink');
         if (!fromEl || !target || typeof fromEl.getBoundingClientRect !== 'function') return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const badge = document.getElementById('cartBadge');
+            badge?.classList.remove('bump'); void badge?.offsetWidth; badge?.classList.add('bump');
+            return;
+        }
         const a = fromEl.getBoundingClientRect();
         const b = target.getBoundingClientRect();
         const dot = document.createElement('div');
@@ -754,7 +889,7 @@ function flyToCart(fromEl) {
             { transform: 'translate(0, 0) scale(1)', opacity: 1 },
             { transform: `translate(${dx * 0.5}px, ${dy - 60}px) scale(0.85)`, opacity: 1, offset: 0.55 },
             { transform: `translate(${dx}px, ${dy}px) scale(0.35)`, opacity: 0.9 }
-        ], { duration: 650, easing: 'cubic-bezier(.3,.7,.4,1)' });
+        ], { duration: 700, easing: 'cubic-bezier(0.77, 0, 0.175, 1)' });
         anim.onfinish = () => {
             dot.remove();
             const badge = document.getElementById('cartBadge');
@@ -775,7 +910,17 @@ function flyToCart(fromEl) {
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        location.hash = this.getAttribute('href');
+        if (this.hasAttribute('data-skip')) {
+            const main = document.getElementById('main');
+            main?.focus();
+            return;
+        }
+        const href = this.getAttribute('href');
+        if (href === location.hash || (href === '#home' && !location.hash)) { Router.go(href); return; }
+        // pushState avoids the browser's instant native jump to #menu/#contact,
+        // so the smooth scroll starts from where the reader actually is.
+        try { history.pushState(null, '', href); Router.navigate(); }
+        catch { location.hash = href; }
     });
 });
 
@@ -786,38 +931,128 @@ function initHamburger() {
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('navLinks');
     const overlay = document.getElementById('navOverlay');
+    const navbar = document.getElementById('navbar');
     if (!hamburger || !navLinks) return;
 
-    function closeMenu() {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('open');
-        if (overlay) overlay.classList.remove('active');
+    function setOpen(open) {
+        hamburger.classList.toggle('active', open);
+        navLinks.classList.toggle('open', open);
+        navbar?.classList.toggle('menu-open', open);
+        if (overlay) overlay.classList.toggle('active', open);
+        hamburger.setAttribute('aria-expanded', String(open));
+        hamburger.setAttribute('aria-label', open ? I18n.t('close') : I18n.t('menu_toggle'));
+        if (window.Motion) Motion.lock(open);
     }
+    const closeMenu = () => { if (navLinks.classList.contains('open')) setOpen(false); };
 
-    function toggleMenu() {
-        hamburger.classList.toggle('active');
-        navLinks.classList.toggle('open');
-        if (overlay) overlay.classList.toggle('active');
-    }
-
-    hamburger.addEventListener('click', toggleMenu);
-
-    // Close when overlay is clicked
-    if (overlay) {
-        overlay.addEventListener('click', closeMenu);
-    }
-
-    // Close menu when a nav link is clicked
-    navLinks.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', closeMenu);
-    });
-
-    // Close menu on outside click
+    hamburger.addEventListener('click', () => setOpen(!navLinks.classList.contains('open')));
+    if (overlay) overlay.addEventListener('click', closeMenu);
+    navLinks.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', closeMenu));
     document.addEventListener('click', (e) => {
-        if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-            closeMenu();
-        }
+        if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) closeMenu();
     });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    window.matchMedia('(min-width: 901px)').addEventListener?.('change', (e) => { if (e.matches) closeMenu(); });
+}
+
+// ============================================
+// Modals — focus management, Esc / backdrop close, scroll lock.
+// Works with the existing classList 'active' toggles used everywhere.
+// ============================================
+const Modals = {
+    stack: [],
+    init() {
+        ['customizeModal', 'checkoutModal'].forEach(id => {
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            new MutationObserver(() => {
+                const open = modal.classList.contains('active');
+                const idx = this.stack.indexOf(modal);
+                if (open && idx === -1) this.onOpen(modal);
+                else if (!open && idx !== -1) this.onClose(modal);
+            }).observe(modal, { attributes: true, attributeFilter: ['class'] });
+            modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', () => this.close(modal)));
+        });
+        document.addEventListener('keydown', (e) => {
+            const top = this.stack[this.stack.length - 1];
+            if (!top) return;
+            if (e.key === 'Escape') { e.preventDefault(); this.close(top); }
+            if (e.key === 'Tab') this.trap(e, top);
+        });
+    },
+    close(modal) {
+        if (modal.id === 'customizeModal') Customizer.close();
+        else modal.classList.remove('active');
+    },
+    onOpen(modal) {
+        modal._returnFocus = document.activeElement;
+        this.stack.push(modal);
+        if (this.stack.length === 1 && window.Motion) Motion.lock(true);
+        const content = modal.querySelector('.modal-content');
+        if (content) content.scrollTop = 0;
+        const body = modal.querySelector('.cust-body');
+        if (body) body.scrollTop = 0;
+        setTimeout(() => modal.querySelector('.modal-close')?.focus({ preventScroll: true }), 60);
+    },
+    onClose(modal) {
+        this.stack.splice(this.stack.indexOf(modal), 1);
+        if (!this.stack.length && window.Motion) Motion.lock(false);
+        const back = modal._returnFocus;
+        if (back && document.contains(back) && typeof back.focus === 'function') back.focus({ preventScroll: true });
+    },
+    trap(e, modal) {
+        const f = [...modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+            .filter(el => !el.disabled && el.offsetParent !== null);
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+};
+
+// ============================================
+// Live "open now" pill — derived from the published opening hours
+// (Mon–Fri 11:00–22:00, Sat–Sun 12:00–23:00, local time).
+// ============================================
+const OpenStatus = {
+    HOURS: { weekday: [11, 22], weekend: [12, 23] },
+    init() {
+        this.pill = document.getElementById('openStatus');
+        this.text = document.getElementById('openStatusText');
+        if (!this.pill || !this.text) return;
+        this.update();
+        setInterval(() => { if (!document.hidden) this.update(); }, 60000);
+    },
+    range(day) { return (day === 0 || day === 6) ? this.HOURS.weekend : this.HOURS.weekday; },
+    fmt(h) { return String(h).padStart(2, '0') + ':00'; },
+    update() {
+        const now = new Date();
+        const [o, c] = this.range(now.getDay());
+        const h = now.getHours() + now.getMinutes() / 60;
+        const open = h >= o && h < c;
+        let label;
+        if (open) label = `${I18n.t('open_now')} · ${I18n.t('until')} ${this.fmt(c)}`;
+        else {
+            const next = h < o ? o : this.range((now.getDay() + 1) % 7)[0];
+            label = `${I18n.t('closed_now')} · ${I18n.t('opens')} ${this.fmt(next)}`;
+        }
+        this.text.textContent = label;
+        this.pill.classList.toggle('is-open', open);
+        this.pill.hidden = false;
+    }
+};
+
+// Extra i18n hooks used by the redesigned markup (aria-labels / titles / SVG text).
+function applyExtraI18n() {
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', I18n.t(el.dataset.i18nAria)));
+    document.querySelectorAll('[data-i18n-title]').forEach(el => el.setAttribute('title', I18n.t(el.dataset.i18nTitle)));
+    document.querySelectorAll('[data-cursor-i18n]').forEach(el => { el.dataset.cursor = I18n.t(el.dataset.cursorI18n); });
+    const hb = document.getElementById('hamburger');
+    if (hb) hb.setAttribute('aria-label', I18n.t('menu_toggle'));
+    const badge = document.getElementById('badgeText');
+    if (badge) badge.textContent = I18n.t('badge_txt').repeat(2);
+    const search = document.getElementById('searchInput');
+    if (search) search.setAttribute('aria-label', I18n.t('search_ph'));
 }
 
 // Login / password-reset / admin wiring now lives in admin-app.js (/admin page).
@@ -826,12 +1061,17 @@ function initHamburger() {
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     I18n.init();
+    applyExtraI18n();
     initConfirmModal();
     Customizer.init();
     ThemeManager.init();
     CartBadge.init();
     initHamburger();
-    ScrollReveal.init();
+    Modals.init();
+    OpenStatus.init();
+    if (window.Motion) {
+        try { Motion.init(); } catch (e) { console.error('Motion init failed', e); document.documentElement.classList.remove('motion-pending'); }
+    }
     MenuDisplay.init();
     Checkout.init();
     if (typeof Track !== 'undefined') Track.init();

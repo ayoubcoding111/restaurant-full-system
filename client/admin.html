@@ -1,349 +1,429 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#dc2626" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#100d0b" />
+    <meta name="robots" content="noindex" />
     <title>Delicious Restaurant - Staff &amp; Admin</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="stylesheet" href="styles.css?v=7" />
+    <!-- Theme + language before first paint (same keys and default as the public site) -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        try { d.setAttribute('data-theme', localStorage.getItem('theme') === 'light' ? 'light' : 'dark'); } catch (e) {}
+        try { var l = localStorage.getItem('app_lang'); if (l === 'ar') { d.lang = 'ar'; d.dir = 'rtl'; } else if (l === 'fr') { d.lang = 'fr'; } } catch (e) {}
+      })();
+    </script>
+    <link rel="preload" as="font" type="font/woff2" href="fonts/bricolage-grotesque-latin-standard-normal.woff2" crossorigin />
+    <link rel="stylesheet" href="admin.css?v=1" />
   </head>
   <body>
-    <!-- Admin top bar -->
-    <nav class="navbar">
-      <div class="container nav-container">
-        <div class="logo">
-          <h1><svg class="ic ic-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V7"/><circle cx="12" cy="5.5" r="1"/><path d="M4 16a8 8 0 0 1 16 0"/><path d="M2 19.5h20"/></svg> Delicious <span style="font-weight:400;font-size:0.85rem">· Staff</span></h1>
-        </div>
-        <div class="nav-links" id="adminHeaderAuth" style="display:flex">
-          <span class="footer-user" id="adminUser"></span>
-          <a href="/" class="btn btn-secondary btn-sm" data-i18n="back_menu">Back to Menu</a>
-          <button class="btn btn-secondary btn-sm" id="adminLogoutBtn">Logout</button>
+    <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
+
+    <!-- Top bar -->
+    <header class="app-bar">
+      <div class="app-bar-inner">
+        <a href="/" class="logo" aria-label="Delicious — home">
+          <span class="logo-mark" aria-hidden="true">D</span>
+          <span class="logo-word">Delicious</span>
+          <span class="logo-tag" data-i18n="tab_staff">Staff</span>
+        </a>
+
+        <div class="bar-tools">
+          <div class="lang-dropdown" id="langDropdown">
+            <button type="button" class="tool-btn lang-globe-btn" id="langGlobeBtn" aria-label="Language" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg>
+              <span id="langCurrent">EN</span>
+            </button>
+            <div class="lang-menu hidden" id="langMenu" role="menu">
+              <button type="button" class="lang-option" data-lang="en" role="menuitem">
+                <svg viewBox="0 0 3 2" aria-hidden="true"><rect width="3" height="2" fill="#fff"/><rect x="1.25" width="0.5" height="2" fill="#CE1124"/><rect y="0.75" width="3" height="0.5" fill="#CE1124"/></svg>
+                <span>English</span>
+              </button>
+              <button type="button" class="lang-option" data-lang="fr" role="menuitem">
+                <svg viewBox="0 0 3 2" aria-hidden="true"><rect width="1" height="2" fill="#0055A4"/><rect x="1" width="1" height="2" fill="#fff"/><rect x="2" width="1" height="2" fill="#EF4135"/></svg>
+                <span>Français</span>
+              </button>
+              <button type="button" class="lang-option" data-lang="ar" role="menuitem">
+                <svg viewBox="0 0 3 2" aria-hidden="true"><defs><mask id="dzcut"><rect width="3" height="2" fill="#fff"/><circle cx="1.66" cy="1" r="0.37" fill="#000"/></mask></defs><rect width="1.5" height="2" fill="#006233"/><rect x="1.5" width="1.5" height="2" fill="#fff"/><circle cx="1.5" cy="1" r="0.45" fill="#D21034" mask="url(#dzcut)"/><polygon points="1.74,0.88 1.765,0.955 1.845,0.955 1.78,1.005 1.805,1.08 1.74,1.03 1.675,1.08 1.7,1.005 1.635,0.955 1.715,0.955" fill="#D21034"/></svg>
+                <span>العربية</span>
+              </button>
+            </div>
+          </div>
+
+          <label class="tool-btn theme-toggle" data-i18n-title="theme_t" title="Toggle dark mode">
+            <input type="checkbox" id="themeSwitch" class="sr-only" data-i18n-aria="theme_t" aria-label="Toggle dark mode" checked />
+            <svg class="ic ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            <svg class="ic ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          </label>
+
+          <!-- Signed-in tools (AdminGate shows / hides this group) -->
+          <div class="bar-auth hidden" id="adminHeaderAuth">
+            <span class="user-chip" id="adminUser"></span>
+            <a href="/" class="btn btn-ghost btn-sm bar-btn" data-i18n-title="back_menu" title="Back to Menu">
+              <svg class="ic ic-flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+              <span class="bar-btn-label" data-i18n="back_menu">Back to Menu</span>
+            </a>
+            <button type="button" class="btn btn-ghost btn-sm bar-btn" id="adminLogoutBtn" title="Logout">
+              <svg class="ic ic-flip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+              <span class="bar-btn-label">Logout</span>
+            </button>
+          </div>
         </div>
       </div>
-    </nav>
+    </header>
 
-    <!-- Login view (Option A: logged-out visitors see a login page) -->
-    <section id="loginView" class="page-section hidden">
-      <div class="container">
-        <div class="thank-you-card">
-          <h2 class="section-title" data-i18n="login_title">Staff / Admin Login</h2>
-          <p class="thank-you-text" data-i18n="fp_sub">Enter your account email or username and we'll send you a reset link.</p>
-          <button class="btn btn-primary" id="loginViewBtn" data-i18n="login_btn">Login</button>
+    <main id="main" class="page" tabindex="-1">
+      <!-- Login view: logged-out visitors land here. The login / forgot / reset
+           panels keep their #…Modal ids (auth.js toggles .active on them). -->
+      <section id="loginView" class="view view-auth hidden">
+        <div class="auth-grid">
+          <div class="auth-side">
+            <div class="auth-stage">
+              <section id="loginModal" class="auth-panel" aria-labelledby="loginTitle">
+                <button type="button" class="close-login modal-close auth-close" data-i18n-aria="close" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                <h1 class="auth-title" id="loginTitle" data-i18n="login_title" data-accent>Staff / Admin Login</h1>
+                <form id="loginForm" class="auth-form">
+                  <div class="form-group">
+                    <label for="loginUsername" data-i18n="login_user">Username or Email</label>
+                    <input type="text" id="loginUsername" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" data-i18n-ph="login_user_ph" placeholder="e.g. admin or you@example.com" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="loginPassword" data-i18n="login_pass">Password</label>
+                    <input type="password" id="loginPassword" name="password" autocomplete="current-password" required />
+                  </div>
+                  <p class="form-error hidden" id="loginError" role="alert"></p>
+                  <button type="submit" class="btn btn-primary btn-block" data-i18n="login_btn">Login</button>
+                  <p class="auth-link-wrap">
+                    <a href="#" id="forgotPasswordLink" class="auth-link" data-i18n="forgot_link">Forgot password?</a>
+                  </p>
+                </form>
+              </section>
+
+              <section id="forgotModal" class="auth-panel" aria-labelledby="forgotTitle">
+                <button type="button" class="close-forgot modal-close auth-close" data-i18n-aria="close" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                <h1 class="auth-title" id="forgotTitle" data-i18n="fp_title" data-accent>Reset Password</h1>
+                <p class="auth-lede" data-i18n="fp_sub">Enter your account email or username and we'll send you a reset link.</p>
+                <form id="forgotForm" class="auth-form">
+                  <div class="form-group">
+                    <label for="forgotEmail" data-i18n="fp_field">Email or Username</label>
+                    <input type="text" id="forgotEmail" name="email" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="you@example.com" required />
+                  </div>
+                  <p class="form-error hidden" id="forgotError" role="alert"></p>
+                  <p class="form-success hidden" id="forgotSuccess" role="status"></p>
+                  <button type="submit" class="btn btn-primary btn-block" data-i18n="fp_btn">Send Reset Link</button>
+                  <p class="auth-link-wrap">
+                    <a href="#" id="backToLoginLink" class="auth-link" data-i18n="back_login">← Back to login</a>
+                  </p>
+                </form>
+              </section>
+
+              <section id="resetModal" class="auth-panel" aria-labelledby="resetTitle">
+                <button type="button" class="close-reset modal-close auth-close" data-i18n-aria="close" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+                <h1 class="auth-title" id="resetTitle" data-i18n="rp_title" data-accent>Choose a New Password</h1>
+                <form id="resetForm" class="auth-form">
+                  <div class="form-group">
+                    <label for="resetPassword" data-i18n="rp_new">New Password (min 6 characters)</label>
+                    <input type="password" id="resetPassword" name="password" minlength="6" autocomplete="new-password" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="resetPasswordConfirm" data-i18n="rp_confirm">Confirm New Password</label>
+                    <input type="password" id="resetPasswordConfirm" name="confirm" minlength="6" autocomplete="new-password" required />
+                  </div>
+                  <p class="form-error hidden" id="resetError" role="alert"></p>
+                  <p class="form-success hidden" id="resetSuccess" role="status"></p>
+                  <button type="submit" class="btn btn-primary btn-block" data-i18n="rp_btn">Reset Password</button>
+                </form>
+              </section>
+
+              <!-- Shown only when no panel above is open -->
+              <div class="auth-fallback">
+                <h1 class="auth-title" data-i18n="login_title" data-accent>Staff / Admin Login</h1>
+                <button type="button" class="btn btn-primary" id="loginViewBtn" data-i18n="login_btn">Login</button>
+              </div>
+            </div>
+          </div>
+
+          <figure class="auth-media" aria-hidden="true">
+            <div class="auth-arch">
+              <!-- Pizza in the oven: Anna Ansone / Unsplash (see imgs/art/CREDITS.md) -->
+              <img src="imgs/art/pizza-in-oven-1120.webp" srcset="imgs/art/pizza-in-oven-560.webp 560w, imgs/art/pizza-in-oven-1120.webp 1120w" sizes="(max-width: 900px) 100vw, 40vw" width="1120" height="1400" alt="" loading="lazy" decoding="async" />
+            </div>
+            <figcaption class="auth-caption">
+              <span class="auth-wordmark">Delicious</span>
+              <span class="auth-line serif-accent" data-i18n="contact_b">Let's get cooking.</span>
+            </figcaption>
+          </figure>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Staff Dashboard Section -->
-    <section id="staffDashboard" class="page-section dashboard-section hidden">
-      <div class="container">
-        <h2 class="section-title" data-i18n="staff_title">Order Management</h2>
-        <div id="staffDashboardContent" class="dashboard-content"></div>
-      </div>
-    </section>
-
-    <!-- Admin Dashboard Section -->
-    <section id="adminDashboard" class="page-section dashboard-section hidden">
-      <div class="container">
-        <div class="admin-dash-head">
-          <button id="adminHamburger" class="admin-hamburger" aria-label="Toggle admin menu">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-          <h2 class="section-title" data-i18n="admin_title">Admin Dashboard</h2>
+      <!-- Staff Dashboard -->
+      <section id="staffDashboard" class="view dashboard-section hidden">
+        <div class="container">
+          <header class="page-head">
+            <h1 class="page-title" data-i18n="staff_title" data-accent>Order Management</h1>
+          </header>
+          <div id="staffDashboardContent" class="dashboard-content orders-board"></div>
         </div>
+      </section>
 
-        <div class="admin-layout">
+      <!-- Admin Dashboard. .admin-dash-head must stay a direct child of this
+           .container: admin.js inserts the welcome header right before it. -->
+      <section id="adminDashboard" class="view dashboard-section hidden">
+        <div class="container admin-layout">
+          <div class="admin-dash-head page-head">
+            <h1 class="page-title" data-i18n="admin_title" data-accent>Admin Dashboard</h1>
+          </div>
+
           <div class="admin-overlay" id="adminOverlay"></div>
-          <aside class="admin-sidebar" id="adminSidebar">
-            <button class="admin-dash-tab active" data-tab="staff">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>
+          <nav class="admin-sidebar" id="adminSidebar" data-i18n-aria="admin_title" aria-label="Admin Dashboard">
+            <button type="button" id="adminHamburger" class="admin-hamburger" aria-label="Toggle admin menu" aria-controls="adminSidebar" aria-expanded="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+            <button type="button" class="admin-dash-tab active" data-tab="staff">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>
               <span data-i18n="tab_staff">Staff</span>
             </button>
-            <button class="admin-dash-tab" data-tab="orders">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
+            <button type="button" class="admin-dash-tab" data-tab="orders">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg>
               <span data-i18n="tab_orders">Orders</span>
             </button>
-            <button class="admin-dash-tab" data-tab="menu">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V2M6 2v20M20 15V2a4 4 0 0 0-4 4v7a2 2 0 0 0 2 2h2zm0 0v7"/></svg>
+            <button type="button" class="admin-dash-tab" data-tab="menu">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v7a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V2M6 2v20M20 15V2a4 4 0 0 0-4 4v7a2 2 0 0 0 2 2h2zm0 0v7"/></svg>
               <span data-i18n="tab_menu">Menu Items</span>
             </button>
-            <button class="admin-dash-tab" data-tab="analytics">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+            <button type="button" class="admin-dash-tab" data-tab="analytics">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
               <span data-i18n="tab_analytics">Analytics</span>
             </button>
-            <button class="admin-dash-tab" data-tab="reviews">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+            <button type="button" class="admin-dash-tab" data-tab="reviews">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
               <span data-i18n="tab_reviews">Reviews</span>
             </button>
-            <button class="admin-dash-tab" data-tab="zones">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <button type="button" class="admin-dash-tab" data-tab="zones">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
               <span data-i18n="tab_zones">Zones</span>
             </button>
-            <button class="admin-dash-tab" data-tab="account">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <button type="button" class="admin-dash-tab" data-tab="account">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               <span data-i18n="tab_account">My Account</span>
             </button>
-          </aside>
+          </nav>
 
           <div class="admin-main">
-
-        <!-- Staff Panel -->
-        <div id="adminPanel-staff" class="admin-dash-panel active">
-          <div class="staff-form-wrap">
-            <h3 data-i18n="add_staff_t">Add New Staff</h3>
-            <form id="adminStaffForm" class="inline-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="staffUsername" data-i18n="u_name">Username *</label>
-                  <input type="text" id="staffUsername" name="username" required />
-                </div>
-                <div class="form-group">
-                  <label for="staffEmail" data-i18n="u_email">Email *</label>
-                  <input type="email" id="staffEmail" name="email" placeholder="staff@example.com" required />
-                </div>
-                <div class="form-group">
-                  <label for="staffPassword" data-i18n="u_pass">Password *</label>
-                  <input type="password" id="staffPassword" name="password" minlength="6" required />
-                </div>
-                <div class="form-group">
-                  <label for="staffFullName" data-i18n="u_full">Full Name *</label>
-                  <input type="text" id="staffFullName" name="full_name" required />
-                </div>
-                <div class="form-group">
-                  <label for="staffRoleSelect" data-i18n="u_role">Role</label>
-                  <select id="staffRoleSelect" name="role">
-                    <option value="staff" data-i18n="r_staff">Staff</option>
-                    <option value="admin" data-i18n="r_admin">Admin</option>
-                  </select>
-                </div>
+            <!-- Staff Panel -->
+            <div id="adminPanel-staff" class="admin-dash-panel panel-split active">
+              <div class="staff-form-wrap card">
+                <h2 class="card-title" data-i18n="add_staff_t">Add New Staff</h2>
+                <form id="adminStaffForm" class="inline-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="staffUsername" data-i18n="u_name">Username *</label>
+                      <input type="text" id="staffUsername" name="username" autocomplete="off" autocapitalize="none" spellcheck="false" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="staffEmail" data-i18n="u_email">Email *</label>
+                      <input type="email" id="staffEmail" name="email" placeholder="staff@example.com" autocomplete="off" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="staffPassword" data-i18n="u_pass">Password *</label>
+                      <input type="password" id="staffPassword" name="password" minlength="6" autocomplete="new-password" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="staffFullName" data-i18n="u_full">Full Name *</label>
+                      <input type="text" id="staffFullName" name="full_name" autocomplete="off" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="staffRoleSelect" data-i18n="u_role">Role</label>
+                      <select id="staffRoleSelect" name="role">
+                        <option value="staff" data-i18n="r_staff">Staff</option>
+                        <option value="admin" data-i18n="r_admin">Admin</option>
+                      </select>
+                    </div>
+                  </div>
+                  <p class="form-error hidden" id="staffFormError" role="alert"></p>
+                  <button type="submit" class="btn btn-primary" data-i18n="create_acc">Create Account</button>
+                </form>
               </div>
-              <button type="submit" class="btn btn-primary btn-sm" data-i18n="create_acc">Create Account</button>
-              <p class="form-error hidden" id="staffFormError" style="margin-top:1rem"></p>
-            </form>
-          </div>
-          <div class="staff-list"></div>
-        </div>
+              <div class="staff-list"></div>
+            </div>
 
-        <!-- Orders Panel -->
-        <div id="adminPanel-orders" class="admin-dash-panel">
-          <div class="orders-list"></div>
-        </div>
+            <!-- Orders Panel (admin.js adds the live controls + status filters) -->
+            <div id="adminPanel-orders" class="admin-dash-panel orders-board">
+              <div class="orders-list"></div>
+            </div>
 
-        <!-- Analytics Panel -->
-        <div id="adminPanel-analytics" class="admin-dash-panel">
-          <div class="analytics-toolbar">
-            <button class="btn btn-secondary btn-sm" onclick="AdminDashboard.exportOrdersCSV()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Export Orders CSV</button>
-          </div>
-          <div id="analyticsContent"><p class="loading-text">Loading analytics...</p></div>
-        </div>
+            <!-- Analytics Panel -->
+            <div id="adminPanel-analytics" class="admin-dash-panel">
+              <div class="analytics-toolbar">
+                <button type="button" class="btn btn-ghost btn-sm" onclick="AdminDashboard.exportOrdersCSV()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> Export Orders CSV</button>
+              </div>
+              <div id="analyticsContent"><p class="loading-text">Loading analytics...</p></div>
+            </div>
 
-        <!-- Reviews Panel -->
-        <div id="adminPanel-reviews" class="admin-dash-panel">
-          <div class="dash-filters" id="reviewsFilters">
-            <button class="filter-btn active" data-filter="all" onclick="AdminDashboard.setReviewFilter('all')">All</button>
-            <button class="filter-btn" data-filter="pending" onclick="AdminDashboard.setReviewFilter('pending')">Pending</button>
-          </div>
-          <div id="reviewsList" class="staff-list"><p class="loading-text">Loading reviews...</p></div>
-        </div>
+            <!-- Reviews Panel -->
+            <div id="adminPanel-reviews" class="admin-dash-panel">
+              <div class="dash-filters" id="reviewsFilters">
+                <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true" onclick="AdminDashboard.setReviewFilter('all')" data-i18n="f_all">All</button>
+                <button type="button" class="filter-btn" data-filter="pending" aria-pressed="false" onclick="AdminDashboard.setReviewFilter('pending')" data-i18n="st_pending">Pending</button>
+              </div>
+              <div id="reviewsList" class="staff-list"><p class="loading-text">Loading reviews...</p></div>
+            </div>
 
-        <!-- Zones Panel -->
-        <div id="adminPanel-zones" class="admin-dash-panel">
-          <div class="staff-form-wrap">
-            <h3 data-i18n="add_zone_t">Add Delivery Zone</h3>
-            <form id="adminZoneForm" class="inline-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="zoneName" data-i18n="z_name">Name *</label>
-                  <input type="text" id="zoneName" name="name" required />
-                </div>
-                <div class="form-group">
-                  <label for="zoneFee" data-i18n="z_fee">Fee ($) *</label>
-                  <input type="number" id="zoneFee" name="fee" step="0.01" min="0" required />
-                </div>
-                <div class="form-group">
-                  <label for="zoneFreeOver" data-i18n="z_free">Free over ($, optional)</label>
-                  <input type="number" id="zoneFreeOver" name="free_over" step="0.01" min="0" />
-                </div>
-                <div class="form-group">
-                  <label for="zoneEta" data-i18n="z_eta">ETA (min)</label>
-                  <input type="number" id="zoneEta" name="eta_min" step="1" min="0" />
-                </div>
+            <!-- Zones Panel -->
+            <div id="adminPanel-zones" class="admin-dash-panel panel-split">
+              <div class="staff-form-wrap card">
+                <h2 class="card-title" data-i18n="add_zone_t">Add Delivery Zone</h2>
+                <form id="adminZoneForm" class="inline-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="zoneName" data-i18n="z_name">Name *</label>
+                      <input type="text" id="zoneName" name="name" autocomplete="off" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="zoneFee" data-i18n="z_fee">Fee ($) *</label>
+                      <input type="number" id="zoneFee" name="fee" step="0.01" min="0" inputmode="decimal" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="zoneFreeOver" data-i18n="z_free">Free over ($, optional)</label>
+                      <input type="number" id="zoneFreeOver" name="free_over" step="0.01" min="0" inputmode="decimal" />
+                    </div>
+                    <div class="form-group">
+                      <label for="zoneEta" data-i18n="z_eta">ETA (min)</label>
+                      <input type="number" id="zoneEta" name="eta_min" step="1" min="0" inputmode="numeric" />
+                    </div>
+                  </div>
+                  <p class="form-error hidden" id="zoneFormError" role="alert"></p>
+                  <button type="submit" class="btn btn-primary" data-i18n="add_zone_btn">Add Zone</button>
+                </form>
               </div>
-              <button type="submit" class="btn btn-primary btn-sm" data-i18n="add_zone_btn">Add Zone</button>
-              <p class="form-error hidden" id="zoneFormError" style="margin-top:1rem"></p>
-            </form>
-          </div>
-          <div id="zonesList" class="staff-list"></div>
-        </div>
+              <div id="zonesList" class="staff-list"></div>
+            </div>
 
-        <!-- Menu Panel -->
-        <div id="adminPanel-menu" class="admin-dash-panel">
-          <div class="menu-form-wrap">
-            <h3 data-i18n="add_item_t">Add Menu Item</h3>
-            <form id="adminAddItemForm" enctype="multipart/form-data" class="inline-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="adminItemName" data-i18n="i_name">Name *</label>
-                  <input type="text" id="adminItemName" name="name" required />
-                </div>
-                <div class="form-group">
-                  <label for="adminItemPrice" data-i18n="i_price">Price ($) *</label>
-                  <input type="number" id="adminItemPrice" name="price" step="0.01" min="0" required />
-                </div>
-                <div class="form-group">
-                  <label for="adminItemCategory" data-i18n="i_cat">Category *</label>
-                  <select id="adminItemCategory" name="category" required>
-                    <option value="" data-i18n="i_select">Select</option>
-                    <option value="pizzas">Pizzas</option>
-                    <option value="tacos">Tacos</option>
-                    <option value="drinks">Drinks</option>
-                    <option value="familypack">Family Pack</option>
-                  </select>
-                </div>
+            <!-- Menu Panel -->
+            <div id="adminPanel-menu" class="admin-dash-panel panel-split">
+              <div class="menu-form-wrap card">
+                <h2 class="card-title" data-i18n="add_item_t">Add Menu Item</h2>
+                <form id="adminAddItemForm" enctype="multipart/form-data" class="inline-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="adminItemName" data-i18n="i_name">Name *</label>
+                      <input type="text" id="adminItemName" name="name" autocomplete="off" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="adminItemPrice" data-i18n="i_price">Price ($) *</label>
+                      <input type="number" id="adminItemPrice" name="price" step="0.01" min="0" inputmode="decimal" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="adminItemCategory" data-i18n="i_cat">Category *</label>
+                      <select id="adminItemCategory" name="category" required>
+                        <option value="" data-i18n="i_select">Select</option>
+                        <option value="pizzas">Pizzas</option>
+                        <option value="tacos">Tacos</option>
+                        <option value="drinks">Drinks</option>
+                        <option value="familypack">Family Pack</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="adminItemDesc" data-i18n="i_desc">Description</label>
+                    <textarea id="adminItemDesc" name="description" rows="3" data-i18n-ph="i_desc_ph" placeholder="A short description of the item..."></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="adminItemImage" data-i18n="i_img">Image *</label>
+                    <input type="file" id="adminItemImage" name="image" accept="image/*" required />
+                    <div id="adminImagePreview" class="image-preview"></div>
+                  </div>
+                  <p class="form-error hidden" id="itemFormError" role="alert"></p>
+                  <button type="submit" class="btn btn-primary" data-i18n="add_item_btn">Add Item</button>
+                </form>
               </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="adminItemDesc" data-i18n="i_desc">Description</label>
-                  <textarea id="adminItemDesc" name="description" rows="3" data-i18n-ph="i_desc_ph" placeholder="A short description of the item..."></textarea>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="adminItemImage" data-i18n="i_img">Image *</label>
-                  <input type="file" id="adminItemImage" name="image" accept="image/*" required />
-                  <div id="adminImagePreview" class="image-preview"></div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary btn-sm" data-i18n="add_item_btn">Add Item</button>
-              <p class="form-error hidden" id="itemFormError" style="margin-top:1rem"></p>
-            </form>
-          </div>
-          <div id="adminMenuList" class="admin-items-list"></div>
-        </div>
+              <div id="adminMenuList" class="admin-items-list"></div>
+            </div>
 
-        <!-- My Account Panel -->
-        <div id="adminPanel-account" class="admin-dash-panel">
-          <div class="staff-form-wrap">
-            <h3 data-i18n="my_profile_t">My Profile</h3>
-            <form id="adminProfileForm" class="inline-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="profileUsername" data-i18n="u_name">Username *</label>
-                  <input type="text" id="profileUsername" name="username" required />
-                </div>
-                <div class="form-group">
-                  <label for="profileEmail" data-i18n="u_email">Email *</label>
-                  <input type="email" id="profileEmail" name="email" required />
-                </div>
-                <div class="form-group">
-                  <label for="profileFullName" data-i18n="u_full">Full Name *</label>
-                  <input type="text" id="profileFullName" name="full_name" required />
-                </div>
+            <!-- My Account Panel -->
+            <div id="adminPanel-account" class="admin-dash-panel panel-pair">
+              <div class="staff-form-wrap card">
+                <h2 class="card-title" data-i18n="my_profile_t">My Profile</h2>
+                <form id="adminProfileForm" class="inline-form">
+                  <div class="form-group">
+                    <label for="profileUsername" data-i18n="u_name">Username *</label>
+                    <input type="text" id="profileUsername" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="profileEmail" data-i18n="u_email">Email *</label>
+                    <input type="email" id="profileEmail" name="email" autocomplete="email" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="profileFullName" data-i18n="u_full">Full Name *</label>
+                    <input type="text" id="profileFullName" name="full_name" autocomplete="name" required />
+                  </div>
+                  <p class="form-error hidden" id="profileMsg" role="status"></p>
+                  <button type="submit" class="btn btn-primary" data-i18n="update_profile_btn">Update Profile</button>
+                </form>
               </div>
-              <button type="submit" class="btn btn-primary btn-sm" data-i18n="update_profile_btn">Update Profile</button>
-              <p class="form-error hidden" id="profileMsg" style="margin-top:1rem"></p>
-            </form>
-          </div>
-          <div class="staff-form-wrap">
-            <h3 data-i18n="change_pass_t">Change Password</h3>
-            <form id="adminPasswordForm" class="inline-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="currentPassword" data-i18n="cur_pass">Current Password</label>
-                  <input type="password" id="currentPassword" name="current" required />
-                </div>
-                <div class="form-group">
-                  <label for="newPassword" data-i18n="rp_new">New Password (min 6 characters)</label>
-                  <input type="password" id="newPassword" name="password" minlength="6" required />
-                </div>
-                <div class="form-group">
-                  <label for="newPasswordConfirm" data-i18n="rp_confirm">Confirm New Password</label>
-                  <input type="password" id="newPasswordConfirm" name="confirm" minlength="6" required />
-                </div>
+              <div class="staff-form-wrap card">
+                <h2 class="card-title" data-i18n="change_pass_t">Change Password</h2>
+                <form id="adminPasswordForm" class="inline-form">
+                  <div class="form-group">
+                    <label for="currentPassword" data-i18n="cur_pass">Current Password</label>
+                    <input type="password" id="currentPassword" name="current" autocomplete="current-password" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="newPassword" data-i18n="rp_new">New Password (min 6 characters)</label>
+                    <input type="password" id="newPassword" name="password" minlength="6" autocomplete="new-password" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="newPasswordConfirm" data-i18n="rp_confirm">Confirm New Password</label>
+                    <input type="password" id="newPasswordConfirm" name="confirm" minlength="6" autocomplete="new-password" required />
+                  </div>
+                  <p class="form-error hidden" id="passMsg" role="status"></p>
+                  <button type="submit" class="btn btn-primary" data-i18n="rp_btn">Reset Password</button>
+                </form>
               </div>
-              <button type="submit" class="btn btn-primary btn-sm" data-i18n="rp_btn">Reset Password</button>
-              <p class="form-error hidden" id="passMsg" style="margin-top:1rem"></p>
-            </form>
-          </div>
-        </div>
+            </div>
           </div><!-- /.admin-main -->
         </div><!-- /.admin-layout -->
-      </div>
-    </section>
+      </section>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-      <div class="modal-content">
-        <span class="close-login"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
-        <h2 data-i18n="login_title">Staff / Admin Login</h2>
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="loginUsername" data-i18n="login_user">Username or Email</label>
-            <input type="text" id="loginUsername" name="username" data-i18n-ph="login_user_ph" placeholder="e.g. admin or you@example.com" required />
-          </div>
-          <div class="form-group">
-            <label for="loginPassword" data-i18n="login_pass">Password</label>
-            <input type="password" id="loginPassword" name="password" required />
-          </div>
-          <p class="form-error hidden" id="loginError"></p>
-          <button type="submit" class="btn btn-primary" data-i18n="login_btn">Login</button>
-          <p class="auth-link-wrap">
-            <a href="#" id="forgotPasswordLink" class="auth-link" data-i18n="forgot_link">Forgot password?</a>
-          </p>
-        </form>
+      <!-- Placeholder while the session is being checked (all views hidden) -->
+      <div class="boot-state" aria-hidden="true">
+        <div class="container"><i></i><i></i><i></i></div>
       </div>
-    </div>
+    </main>
 
-    <!-- Forgot Password Modal -->
-    <div id="forgotModal" class="modal">
-      <div class="modal-content">
-        <span class="close-forgot"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
-        <h2 data-i18n="fp_title">Reset Password</h2>
-        <p class="checkout-subtitle" data-i18n="fp_sub">Enter your account email or username and we'll send you a reset link.</p>
-        <form id="forgotForm">
-          <div class="form-group">
-            <label for="forgotEmail" data-i18n="fp_field">Email or Username</label>
-            <input type="text" id="forgotEmail" name="email" placeholder="you@example.com" required />
-          </div>
-          <p class="form-error hidden" id="forgotError"></p>
-          <p class="form-success hidden" id="forgotSuccess"></p>
-          <button type="submit" class="btn btn-primary" data-i18n="fp_btn">Send Reset Link</button>
-          <p class="auth-link-wrap">
-            <a href="#" id="backToLoginLink" class="auth-link" data-i18n="back_login">← Back to login</a>
-          </p>
-        </form>
-      </div>
-    </div>
-
-    <!-- Confirm Dialog -->
-    <div id="confirmModal" class="modal">
-      <div class="modal-content">
-        <h2 data-i18n="confirm_title">Please confirm</h2>
-        <p class="checkout-subtitle" id="confirmMsg"></p>
+    <!-- Confirm Dialog (ui.js askConfirm) -->
+    <div id="confirmModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMsg">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content modal-sm">
+        <h2 class="modal-title" id="confirmTitle" data-i18n="confirm_title">Please confirm</h2>
+        <p class="modal-sub" id="confirmMsg"></p>
         <div class="modal-actions">
-          <button class="btn btn-secondary" id="confirmNoBtn" data-i18n="cancel_btn">Cancel</button>
-          <button class="btn btn-delete" id="confirmYesBtn" data-i18n="delete_btn">Delete</button>
+          <button type="button" class="btn btn-ghost" id="confirmNoBtn" data-i18n="cancel_btn">Cancel</button>
+          <button type="button" class="btn btn-delete" id="confirmYesBtn" data-i18n="delete_btn">Delete</button>
         </div>
       </div>
     </div>
 
     <!-- Edit Menu Item Modal -->
-    <div id="editItemModal" class="modal">
+    <div id="editItemModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editItemTitle">
+      <div class="modal-backdrop"></div>
       <div class="modal-content modal-large">
-        <span class="close-edit-item"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
-        <h2 data-i18n="edit_item_t">Edit Menu Item</h2>
+        <button type="button" class="close-edit-item modal-close" data-i18n-aria="close" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <h2 class="modal-title" id="editItemTitle" data-i18n="edit_item_t">Edit Menu Item</h2>
         <form id="editItemForm">
           <input type="hidden" id="editItemId" />
           <div class="form-row">
             <div class="form-group">
               <label for="editItemName" data-i18n="i_name">Name *</label>
-              <input type="text" id="editItemName" name="name" required />
+              <input type="text" id="editItemName" name="name" autocomplete="off" required />
             </div>
             <div class="form-group">
               <label for="editItemPrice" data-i18n="i_price">Price ($) *</label>
-              <input type="number" id="editItemPrice" name="price" step="0.01" min="0" required />
+              <input type="number" id="editItemPrice" name="price" step="0.01" min="0" inputmode="decimal" required />
             </div>
             <div class="form-group">
               <label for="editItemCategory" data-i18n="i_cat">Category *</label>
@@ -363,12 +443,14 @@
             <label for="editItemImage" data-i18n="change_image">Change image (optional)</label>
             <input type="file" id="editItemImage" name="image" accept="image/*" />
           </div>
-          <h3 class="opts-title" data-i18n="opts_t">Customization options</h3>
-          <p class="checkout-subtitle" data-i18n="opts_hint">Group options (e.g. “Extra ingredients”, “Size”). “Single” = customer picks one (sizes), “Multiple” = can pick several (ingredients). Each adds its price.</p>
+          <div class="opts-head">
+            <h3 class="opts-title" data-i18n="opts_t">Customization options</h3>
+            <p class="form-hint" data-i18n="opts_hint">Group options (e.g. “Extra ingredients”, “Size”). “Single” = customer picks one (sizes), “Multiple” = can pick several (ingredients). Each adds its price.</p>
+          </div>
           <div id="editOptionsList" class="opts-list"></div>
-          <button type="button" class="btn btn-secondary btn-sm" id="addOptionBtn" data-i18n="add_option">+ Add option</button>
-          <p class="form-error hidden" id="editItemError" style="margin-top:1rem"></p>
-          <div style="margin-top:1rem">
+          <button type="button" class="btn btn-ghost btn-sm" id="addOptionBtn" data-i18n="add_option">+ Add option</button>
+          <p class="form-error hidden" id="editItemError" role="alert"></p>
+          <div class="modal-actions">
             <button type="submit" class="btn btn-primary" data-i18n="save_btn">Save Changes</button>
           </div>
         </form>
@@ -376,61 +458,48 @@
     </div>
 
     <!-- Edit Staff Modal -->
-    <div id="editStaffModal" class="modal">
+    <div id="editStaffModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="editStaffTitle">
+      <div class="modal-backdrop"></div>
       <div class="modal-content">
-        <span class="close-edit-staff"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
-        <h2 data-i18n="edit_staff_t">Edit Staff Account</h2>
+        <button type="button" class="close-edit-staff modal-close" data-i18n-aria="close" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <h2 class="modal-title" id="editStaffTitle" data-i18n="edit_staff_t">Edit Staff Account</h2>
         <form id="editStaffForm">
           <input type="hidden" id="editStaffId" />
-          <div class="form-group">
-            <label for="editStaffUsername" data-i18n="u_name">Username *</label>
-            <input type="text" id="editStaffUsername" name="username" required />
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editStaffUsername" data-i18n="u_name">Username *</label>
+              <input type="text" id="editStaffUsername" name="username" autocomplete="off" autocapitalize="none" spellcheck="false" required />
+            </div>
+            <div class="form-group">
+              <label for="editStaffEmail" data-i18n="u_email">Email *</label>
+              <input type="email" id="editStaffEmail" name="email" autocomplete="off" required />
+            </div>
+            <div class="form-group">
+              <label for="editStaffFullName" data-i18n="u_full">Full Name *</label>
+              <input type="text" id="editStaffFullName" name="full_name" autocomplete="off" required />
+            </div>
+            <div class="form-group">
+              <label for="editStaffRole" data-i18n="u_role">Role</label>
+              <select id="editStaffRole" name="role">
+                <option value="staff" data-i18n="r_staff">Staff</option>
+                <option value="admin" data-i18n="r_admin">Admin</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="editStaffPassword" data-i18n="new_pass_opt">New Password (leave blank to keep)</label>
+              <input type="password" id="editStaffPassword" name="password" minlength="6" placeholder="••••••" autocomplete="new-password" />
+            </div>
           </div>
-          <div class="form-group">
-            <label for="editStaffEmail" data-i18n="u_email">Email *</label>
-            <input type="email" id="editStaffEmail" name="email" required />
+          <p class="form-error hidden" id="editStaffError" role="alert"></p>
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary" data-i18n="save_btn">Save Changes</button>
           </div>
-          <div class="form-group">
-            <label for="editStaffFullName" data-i18n="u_full">Full Name *</label>
-            <input type="text" id="editStaffFullName" name="full_name" required />
-          </div>
-          <div class="form-group">
-            <label for="editStaffRole" data-i18n="u_role">Role</label>
-            <select id="editStaffRole" name="role">
-              <option value="staff" data-i18n="r_staff">Staff</option>
-              <option value="admin" data-i18n="r_admin">Admin</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="editStaffPassword" data-i18n="new_pass_opt">New Password (leave blank to keep)</label>
-            <input type="password" id="editStaffPassword" name="password" minlength="6" placeholder="••••••" />
-          </div>
-          <button type="submit" class="btn btn-primary" data-i18n="save_btn">Save Changes</button>
-          <p class="form-error hidden" id="editStaffError" style="margin-top:1rem"></p>
         </form>
       </div>
     </div>
 
-    <!-- Set New Password Modal -->
-    <div id="resetModal" class="modal">
-      <div class="modal-content">
-        <span class="close-reset"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
-        <h2 data-i18n="rp_title">Choose a New Password</h2>
-        <form id="resetForm">
-          <div class="form-group">
-            <label for="resetPassword" data-i18n="rp_new">New Password (min 6 characters)</label>
-            <input type="password" id="resetPassword" name="password" minlength="6" required />
-          </div>
-          <div class="form-group">
-            <label for="resetPasswordConfirm" data-i18n="rp_confirm">Confirm New Password</label>
-            <input type="password" id="resetPasswordConfirm" name="confirm" minlength="6" required />
-          </div>
-          <p class="form-error hidden" id="resetError"></p>
-          <p class="form-success hidden" id="resetSuccess"></p>
-          <button type="submit" class="btn btn-primary" data-i18n="rp_btn">Reset Password</button>
-        </form>
-      </div>
-    </div>
+    <!-- Toasts (ui.js reuses this container) -->
+    <div id="toastWrap" role="status" aria-live="polite"></div>
 
     <script src="i18n.js"></script>
     <script src="icons.js"></script>

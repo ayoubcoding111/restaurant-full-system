@@ -133,23 +133,42 @@ const Track = {
         const idx = steps.indexOf(d.status);
         const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
             ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        // Field labels without the form's required-asterisk / trailing colon.
+        const label = (k) => String(I18n.t(k)).replace(/[\s*:]+$/, '');
+        const pct = idx < 0 ? 0 : idx / (steps.length - 1);
+        // The rail fills from where the previous poll left it.
+        const from = this._lastPct != null && this._lastId === d.id ? this._lastPct : 0;
+        this._lastPct = pct;
+        this._lastId = d.id;
         const timeline = steps.map((s, i) => `
-            <div class="track-step ${i <= idx ? 'done' : ''} ${s === d.status ? 'current' : ''}">
-                <span class="track-dot"></span>
+            <li class="track-step ${i <= idx ? 'done' : ''} ${s === d.status ? 'current' : ''}"${s === d.status ? ' aria-current="step"' : ''}>
+                <span class="track-dot" aria-hidden="true"></span>
                 <span>${esc(I18n.t('st_' + s))}</span>
-            </div>`).join('');
+            </li>`).join('');
         const items = (d.items || []).map(it =>
-            `<li>${esc(it.name)} × ${it.quantity} — $${Number(it.price).toFixed(2)}</li>`).join('');
-        const eta = d.eta_min != null ? `<p>⏱ ~${esc(d.eta_min)} ${esc(I18n.t('min_unit'))}${d.zone_name ? ' • ' + esc(d.zone_name) : ''}</p>` : '';
+            `<li>${esc(it.name)} × ${esc(it.quantity)} — $${Number(it.price).toFixed(2)}</li>`).join('');
+        const clock = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+        const eta = d.eta_min != null ? `<p class="track-eta">${clock}<span>~${esc(d.eta_min)} ${esc(I18n.t('min_unit'))}${d.zone_name ? ' · ' + esc(d.zone_name) : ''}</span></p>` : '';
         box.innerHTML = `
-            <h3>${esc(I18n.t('track_order'))} #${esc(d.id)} — ${esc(I18n.t('st_' + d.status))}</h3>
-            <div class="track-timeline">${timeline}</div>
-            ${eta}
-            <p>${esc(I18n.t('track_for'))}: ${esc(d.customer_name_masked)} • ${esc(d.customer_phone_masked)}</p>
-            <p>${esc(I18n.t('co_addr'))}: ${esc(d.customer_address_masked)}</p>
-            <p><strong>${esc(I18n.t('cart_total'))}</strong> $${Number(d.total).toFixed(2)}</p>
+            <div class="track-head">
+                <p class="eyebrow">${esc(I18n.t('track_order'))} #${esc(d.id)}</p>
+                <h3 class="track-status">${esc(I18n.t('st_' + d.status))}</h3>
+                ${eta}
+            </div>
+            <div class="track-progress">
+                <div class="track-rail" aria-hidden="true"><i style="--p: ${from}"></i></div>
+                <ol class="track-timeline">${timeline}</ol>
+            </div>
+            <dl class="track-details">
+                <div><dt>${esc(label('track_for'))}</dt><dd>${esc(d.customer_name_masked)} · <span dir="ltr">${esc(d.customer_phone_masked)}</span></dd></div>
+                <div><dt>${esc(label('co_addr'))}</dt><dd>${esc(d.customer_address_masked)}</dd></div>
+                <div><dt>${esc(label('cart_total'))}</dt><dd class="price">$${Number(d.total).toFixed(2)}</dd></div>
+            </dl>
             ${items ? `<ul class="track-items">${items}</ul>` : ''}
             <p class="form-hint">${esc(I18n.t('track_auto'))}</p>`;
         box.classList.remove('hidden');
+        const bar = box.querySelector('.track-rail i');
+        if (bar && from !== pct) requestAnimationFrame(() => requestAnimationFrame(() => bar.style.setProperty('--p', pct)));
+        else if (bar) bar.style.setProperty('--p', pct);
     }
 };

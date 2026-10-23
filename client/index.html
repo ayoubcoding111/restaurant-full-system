@@ -1,46 +1,113 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#dc2626" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="description" content="Delicious — pizzas, tacos, drinks and family packs made to order, delivered and tracked live." />
+    <meta name="theme-color" content="#100d0b" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Delicious" />
     <link rel="apple-touch-icon" href="icons/icon-192.png" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <title>Delicious Restaurant - Order Now!</title>
+    <title>Delicious — Hot from our oven to your door</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="stylesheet" href="styles.css?v=7" />
+    <!-- Theme, language, motion and intro flags before first paint (no flash of the wrong theme or of pre-animation content) -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        try { d.setAttribute('data-theme', localStorage.getItem('theme') || 'dark'); } catch (e) {}
+        try { var l = localStorage.getItem('app_lang'); if (l === 'ar') { d.lang = 'ar'; d.dir = 'rtl'; } else if (l === 'fr') { d.lang = 'fr'; } } catch (e) {}
+        var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduce) {
+          d.classList.add('motion-pending');
+          // The intro plays once, on a first visit that lands on the home view.
+          var h = location.hash.replace('#', '');
+          var seen = true;
+          try { seen = localStorage.getItem('intro_seen') === '1'; } catch (e) {}
+          if (!seen && (h === '' || h === 'home')) {
+            d.classList.add('intro-on');
+            // Only the intro needs its first frame early; returning visitors skip this request.
+            var pl = document.createElement('link');
+            pl.rel = 'preload'; pl.as = 'image'; pl.href = 'imgs/art/dough-hands-560.webp';
+            document.head.appendChild(pl);
+          }
+          // Failsafe: never leave content hidden if the motion scripts fail to start.
+          setTimeout(function () { if (!window.__motionBooted) d.classList.remove('motion-pending', 'intro-on'); }, 3500);
+        }
+      })();
+    </script>
+    <link rel="preload" as="font" type="font/woff2" href="fonts/bricolage-grotesque-latin-standard-normal.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="fonts/instrument-serif-latin-400-italic.woff2" crossorigin />
+    <link rel="preload" as="image" media="(min-width: 901px)" imagesrcset="imgs/art/hero-arch-800.webp 800w, imgs/art/hero-arch-1200.webp 1200w, imgs/art/hero-arch-1600.webp 1600w" imagesizes="min(560px, 40vw)" />
+    <link rel="preload" as="image" media="(max-width: 900px)" imagesrcset="imgs/art/hero-wide-760.webp 760w, imgs/art/hero-wide-1200.webp 1200w, imgs/art/hero-wide-2000.webp 2000w" imagesizes="100vw" />
+    <link rel="stylesheet" href="site.css?v=9" />
+    <!-- Without JavaScript the reel has no dishes to show; the full menu note covers ordering. -->
+    <noscript><style>#signature { display: none; }</style></noscript>
   </head>
   <body>
+    <a class="skip-link" href="#main" data-skip data-i18n="skip">Skip to content</a>
+
+    <!--
+      Image credits (all used under the Unsplash License unless noted) — see imgs/art/CREDITS.md
+      Hero pizza: Ivan Torres · Dough in hands: Arturrro · Pizza box: Oscar Ramirez · Cheese pull: Brelyn Bashrum
+      Pizza cut-out: Inna Gurina · Oven, dough, ingredients and peel mood shots: AI-generated with Canva for this site
+    -->
+
+    <!-- First-visit intro (decorative). Its last frame is the hero photo, which flies into the hero arch. -->
+    <div class="intro" id="intro" aria-hidden="true">
+      <div class="intro-bg"></div>
+      <div class="intro-frame" id="introFrame">
+        <img class="intro-img" src="imgs/art/dough-hands-560.webp" alt="" width="560" height="700" decoding="async" loading="lazy" />
+        <img class="intro-img" src="imgs/art/ai-ingredients-560.webp" alt="" width="560" height="700" decoding="async" loading="lazy" />
+        <img class="intro-img" src="imgs/art/ai-into-oven-560.webp" alt="" width="560" height="700" decoding="async" loading="lazy" />
+        <picture class="intro-img intro-img--hero">
+          <source media="(max-width: 900px)" type="image/webp" srcset="imgs/art/hero-wide-760.webp 760w, imgs/art/hero-wide-1200.webp 1200w, imgs/art/hero-wide-2000.webp 2000w" sizes="100vw" />
+          <source type="image/webp" srcset="imgs/art/hero-arch-800.webp 800w, imgs/art/hero-arch-1200.webp 1200w, imgs/art/hero-arch-1600.webp 1600w" sizes="min(560px, 40vw)" />
+          <img src="imgs/art/hero-arch-1200.jpg" alt="" width="1200" height="1500" decoding="async" />
+        </picture>
+      </div>
+      <div class="intro-meta">
+        <span class="intro-brand"><span class="logo-mark">D</span><span>Delicious</span></span>
+        <span class="intro-line" data-i18n="loader_txt">Firing up the oven</span>
+        <span class="intro-count" id="introCount">0</span>
+      </div>
+    </div>
+
+    <!-- Reading progress (decorative) -->
+    <div class="scroll-progress" aria-hidden="true"><i id="scrollProgress"></i></div>
+
+    <!-- Page-transition curtain (decorative) -->
+    <div class="curtain" id="curtain" aria-hidden="true">
+      <div class="curtain-layer curtain-layer--a"></div>
+      <div class="curtain-layer curtain-layer--b"><span class="curtain-word">Delicious</span></div>
+    </div>
+
+    <!-- Cursor follower (fine pointers only, decorative) -->
+    <div class="cursor" id="cursor" aria-hidden="true"><span class="cursor-label" id="cursorLabel"></span></div>
+
     <!-- Navigation -->
-    <nav class="navbar">
-      <div class="container nav-container">
-        <div class="logo">
-          <h1><svg class="ic ic-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V7"/><circle cx="12" cy="5.5" r="1"/><path d="M4 16a8 8 0 0 1 16 0"/><path d="M2 19.5h20"/></svg> Delicious</h1>
-        </div>
-        <button class="hamburger" id="hamburger" aria-label="Toggle navigation">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+    <header class="navbar" id="navbar">
+      <nav class="nav-container" aria-label="Main">
+        <a href="#home" class="logo" aria-label="Delicious — home">
+          <span class="logo-mark" aria-hidden="true">D</span>
+          <span class="logo-word">Delicious</span>
+        </a>
+
         <div class="nav-overlay" id="navOverlay"></div>
         <div class="nav-links" id="navLinks">
-          <a href="#home" class="nav-link" data-i18n="nav_home">Home</a>
-          <a href="#menu" class="nav-link" data-i18n="nav_menu">Menu</a>
-          <a href="#track" class="nav-link" data-i18n="nav_track">Track</a>
-          <a href="#contact" class="nav-link" data-i18n="nav_contact">Contact</a>
-          <a href="#cart" class="nav-link cart-link" id="cartLink">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/><path d="M2 3h3l2.6 12.4a1 1 0 0 0 1 .6h8.9a1 1 0 0 0 1-.8L20.5 7H6"/></svg>
-            <span data-i18n="nav_cart">Cart</span> <span class="cart-badge hidden" id="cartBadge">0</span>
-          </a>
+          <a href="#home" class="nav-link" style="--i:0"><span class="roll" data-i18n="nav_home">Home</span></a>
+          <a href="#menu" class="nav-link" style="--i:1"><span class="roll" data-i18n="nav_menu">Menu</span></a>
+          <a href="#track" class="nav-link" style="--i:2"><span class="roll" data-i18n="nav_track">Track</span></a>
+          <a href="#contact" class="nav-link" style="--i:3"><span class="roll" data-i18n="nav_contact">Contact</span></a>
+        </div>
+
+        <div class="nav-tools">
           <div class="lang-dropdown" id="langDropdown">
-            <button class="lang-globe-btn" id="langGlobeBtn" aria-label="Language" aria-haspopup="true">
-              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg>
+            <button class="tool-btn lang-globe-btn" id="langGlobeBtn" aria-label="Language" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/></svg>
               <span id="langCurrent">EN</span>
-              <svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
             </button>
             <div class="lang-menu hidden" id="langMenu" role="menu">
               <button class="lang-option" data-lang="en" role="menuitem">
@@ -57,255 +124,472 @@
               </button>
             </div>
           </div>
-          <label class="switch" aria-label="Toggle theme">
-            <input type="checkbox" id="themeSwitch" />
-            <span class="slider"></span>
+
+          <label class="tool-btn theme-toggle" data-i18n-title="theme_t" title="Toggle dark mode">
+            <input type="checkbox" id="themeSwitch" class="sr-only" data-i18n-aria="theme_t" aria-label="Toggle dark mode" />
+            <svg class="ic ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            <svg class="ic ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
           </label>
+
+          <a href="#cart" class="cart-link" id="cartLink">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+            <span class="cart-link-label" data-i18n="nav_cart">Cart</span>
+            <span class="cart-badge hidden" id="cartBadge">0</span>
+          </a>
+
+          <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+            <span></span><span></span>
+          </button>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-      <div class="hero-overlay"></div>
-      <div class="hero-content reveal">
-        <h1 class="hero-title" data-i18n="hero_title">Welcome to Delicious Restaurant</h1>
-        <p class="hero-subtitle" data-i18n="hero_sub">Experience the finest flavors in town</p>
-        <a href="#menu" class="btn btn-primary" data-i18n="hero_cta">View Menu</a>
-      </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about">
-      <div class="container">
-        <div class="about-grid">
-          <div class="about-card reveal">
-            <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> <span data-i18n="hours_t">Opening Hours</span></h3>
-            <p data-i18n="hours_wd">Monday - Friday: 11:00 AM - 10:00 PM</p>
-            <p data-i18n="hours_we">Saturday - Sunday: 12:00 PM - 11:00 PM</p>
+    <main id="main" tabindex="-1">
+      <div class="main-view" id="mainView">
+      <!-- ============ HERO ============ -->
+      <section id="home" class="hero" aria-labelledby="heroTitle">
+        <canvas class="embers embers--hero" data-embers="hero" aria-hidden="true"></canvas>
+        <div class="hero-inner">
+          <div class="hero-top">
+            <p class="eyebrow hero-eyebrow" data-hero="eyebrow">
+              <span class="status-pill" id="openStatus" hidden><span class="status-dot"></span><span id="openStatusText"></span></span>
+              <span data-i18n="hero_eyebrow">Pizzas · Tacos · Family packs — delivered</span>
+            </p>
           </div>
-          <div class="about-card call-to-order reveal">
-            <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg> <span data-i18n="call_t">Call to Order</span></h3>
-            <p class="phone-number">(555) 123-4567</p>
-            <p data-i18n="call_sub">Call us directly to place your order!</p>
-          </div>
-          <div class="about-card reveal">
-            <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg> <span data-i18n="loc_t">Location</span></h3>
-            <p>123 Food Street</p>
-            <p>Flavor Town, FT 12345</p>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- Menu Section -->
-    <section id="menu" class="menu">
-      <div class="container">
-        <h2 class="section-title reveal" data-i18n="menu_title">Our Menu</h2>
-        <div class="menu-controls reveal">
-          <input type="text" id="searchInput" class="search-input" data-i18n-ph="search_ph" placeholder="Search menu items..." />
-          <div class="filter-buttons">
-            <button class="filter-btn active" data-category="all" data-i18n="f_all">All</button>
-            <button class="filter-btn" data-category="pizzas" data-i18n="f_pizzas">Pizzas</button>
-            <button class="filter-btn" data-category="tacos" data-i18n="f_tacos">Tacos</button>
-            <button class="filter-btn" data-category="drinks" data-i18n="f_drinks">Drinks</button>
-            <button class="filter-btn" data-category="familypack" data-i18n="f_family">Family Pack</button>
+          <h1 class="hero-title" id="heroTitle">
+            <span class="hero-line"><span class="hero-line-inner" data-split data-i18n="hero_a">Hot from</span></span>
+            <span class="hero-line hero-line--accent"><em class="hero-line-inner serif-accent" data-split data-i18n="hero_b">our oven</em></span>
+            <span class="hero-line hero-line--indent"><span class="hero-line-inner" data-split data-i18n="hero_c">to your door.</span></span>
+          </h1>
+
+          <figure class="hero-media" data-hero="media">
+            <div class="hero-media-frame" id="heroFrame">
+              <div class="hero-media-inner">
+                <picture>
+                  <source media="(max-width: 900px)" type="image/webp" srcset="imgs/art/hero-wide-760.webp 760w, imgs/art/hero-wide-1200.webp 1200w, imgs/art/hero-wide-2000.webp 2000w" sizes="100vw" />
+                  <source type="image/webp" srcset="imgs/art/hero-arch-800.webp 800w, imgs/art/hero-arch-1200.webp 1200w, imgs/art/hero-arch-1600.webp 1600w" sizes="min(560px, 40vw)" />
+                  <img class="hero-img" id="heroImg" src="imgs/art/hero-arch-1200.jpg" width="1200" height="1500" alt="A freshly baked pizza cut into slices on a wooden board, with cherry tomatoes and rosemary" fetchpriority="high" decoding="async" />
+                </picture>
+                <!-- fx.js lays a WebGL heat-haze canvas over the photo here; the photo stays as the poster. -->
+              </div>
+            </div>
+            <a href="#menu" class="hero-badge" aria-label="View menu" data-i18n-aria="hero_cta" data-cursor="Menu" data-cursor-i18n="nav_menu">
+              <svg viewBox="0 0 120 120" aria-hidden="true" class="hero-badge-ring">
+                <defs><path id="badgeCircle" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0" /></defs>
+                <text direction="ltr"><textPath href="#badgeCircle" id="badgeText" textLength="286" lengthAdjust="spacingAndGlyphs">ORDER • TRACK • ENJOY • ORDER • TRACK • ENJOY • </textPath></text>
+              </svg>
+              <svg class="ic hero-badge-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>
+            </a>
+          </figure>
+
+          <div class="hero-bottom" data-hero="bottom">
+            <p class="hero-lede" data-i18n="hero_lede">Every order is made the moment you place it — customised your way, then tracked live, step by step, until it reaches you.</p>
+            <div class="hero-ctas">
+              <a href="#menu" class="btn btn-primary btn-magnetic"><span class="roll" data-i18n="hero_cta">View Menu</span>
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a href="#track" class="btn btn-ghost"><span class="roll" data-i18n="hero_cta2">Track an order</span></a>
+            </div>
           </div>
-        </div>
-        <div id="menuGrid" class="menu-grid"></div>
-        <div class="load-more-wrap" id="loadMoreWrap">
-          <button class="btn btn-primary btn-load-more" id="loadMoreBtn">Load More</button>
-        </div>
-      </div>
-    </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-      <div class="container">
-        <h2 class="section-title reveal" data-i18n="contact_title">Contact Us</h2>
-        <div class="contact-info reveal">
-          <p><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg> Email: info@delicious-restaurant.com</p>
-          <p><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg> Phone: (555) 123-4567</p>
-          <p><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg> Address: 123 Food Street, Flavor Town, FT 12345</p>
+          <div class="scroll-hint" aria-hidden="true"><span data-i18n="scroll_hint">Scroll</span><i></i></div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Cart Page Section -->
-    <section id="cartPage" class="page-section hidden">
-      <div class="container">
-        <h2 class="section-title" data-i18n="cart_title">My Cart</h2>
-        <div id="cartItems" class="cart-items-list"></div>
-        <div id="cartFooter" class="cart-footer hidden">
-          <p class="form-error hidden" id="cartError"></p>
-          <div class="cart-total">
-            <span data-i18n="cart_total">Total:</span>
-            <span id="cartTotal" class="menu-item-price">$0.00</span>
-          </div>
-          <button class="btn btn-primary" id="cartOrderBtn" data-i18n="order_now_btn">Order Now</button>
-          <button class="btn btn-secondary" id="cartClearBtn" data-i18n="clear_cart">Clear Cart</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Thank You Page Section -->
-    <section id="thankYouPage" class="page-section hidden">
-      <div class="container">
-        <div class="thank-you-card">
-          <div class="thank-you-icon"><svg class="ic ic-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5.5"/></svg></div>
-          <h2 class="section-title" data-i18n="thanks_title">Order Placed!</h2>
-          <p class="thank-you-order-id hidden" id="thankYouOrderId"></p>
-          <p class="thank-you-text" data-i18n="thanks_text">Your order has been placed. We'll call you back shortly to confirm!</p>
-          <div style="display:flex;gap:0.5rem;justify-content:center;flex-wrap:wrap">
-            <a href="#menu" class="btn btn-primary" data-i18n="back_menu">Back to Menu</a>
-            <a href="#track" class="btn btn-secondary" id="thankYouTrackBtn" data-i18n="track_this_order">Track this order</a>
+      <!-- ============ MARQUEE ============ -->
+      <section class="marquee" aria-hidden="true">
+        <div class="marquee-row">
+          <div class="marquee-track" id="marqueeTrack">
+            <div class="marquee-group">
+              <span data-i18n="f_pizzas">Pizzas</span><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><em data-i18n="f_tacos">Tacos</em><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><span data-i18n="f_drinks">Drinks</span><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><em data-i18n="f_family">Family Pack</em><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" />
+            </div>
+            <div class="marquee-group">
+              <span data-i18n="f_pizzas">Pizzas</span><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><em data-i18n="f_tacos">Tacos</em><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><span data-i18n="f_drinks">Drinks</span><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><em data-i18n="f_family">Family Pack</em><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" />
+            </div>
+            <div class="marquee-group">
+              <span data-i18n="f_pizzas">Pizzas</span><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><em data-i18n="f_tacos">Tacos</em><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><span data-i18n="f_drinks">Drinks</span><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" /><em data-i18n="f_family">Family Pack</em><img class="mq-pizza" src="imgs/art/pizza-cut-160.webp" alt="" width="160" height="160" loading="lazy" decoding="async" />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Order Tracking Page Section -->
-    <section id="trackPage" class="page-section hidden">
-      <div class="container">
-        <h2 class="section-title" data-i18n="track_title">Track Your Order</h2>
-        <p class="checkout-subtitle" data-i18n="track_sub">Enter your order number and phone to see live status.</p>
-        <form id="trackForm" class="track-form">
-          <div class="form-group">
-            <label for="trackOrderId" data-i18n="track_id">Order number *</label>
-            <input type="number" id="trackOrderId" min="1" step="1" placeholder="e.g. 42" required inputmode="numeric" />
+        <div class="marquee-row marquee-row--outline">
+          <div class="marquee-track marquee-track--rev" id="marqueeTrack2">
+            <div class="marquee-group">
+              <span data-i18n="mq_a">Made to order</span><b>✦</b><span data-i18n="mq_b">Tracked live</span><b>✦</b><span data-i18n="mq_c">Delivered hot</span><b>✦</b>
+            </div>
+            <div class="marquee-group">
+              <span data-i18n="mq_a">Made to order</span><b>✦</b><span data-i18n="mq_b">Tracked live</span><b>✦</b><span data-i18n="mq_c">Delivered hot</span><b>✦</b>
+            </div>
+            <div class="marquee-group">
+              <span data-i18n="mq_a">Made to order</span><b>✦</b><span data-i18n="mq_b">Tracked live</span><b>✦</b><span data-i18n="mq_c">Delivered hot</span><b>✦</b>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="trackPhone" data-i18n="track_phone">Mobile Number *</label>
-            <input type="tel" id="trackPhone" placeholder="e.g. 0555 12 34 56" required inputmode="tel" autocomplete="tel" />
-            <small class="form-hint" data-i18n="co_phone_hint">Algerian mobile: 05 / 06 / 07 or +213…</small>
-          </div>
-          <p class="form-error hidden" id="trackError"></p>
-          <button type="submit" class="btn btn-primary" id="trackBtn" data-i18n="track_btn">Track Order</button>
-        </form>
-        <div id="trackResult" class="track-result hidden"></div>
-      </div>
-    </section>
+        </div>
+      </section>
 
-    <!-- Staff & admin dashboards live on /admin (admin.html). -->
-    <!-- Footer -->
+      <!-- ============ ABOUT / MANIFESTO + INFO ============ -->
+      <section class="about" aria-labelledby="manifestoLabel">
+        <div class="container">
+          <p class="eyebrow" id="manifestoLabel"><span class="eyebrow-num">01</span><span data-i18n="manifesto_label">The house</span></p>
+          <div class="about-stage">
+            <p class="manifesto" data-scrub-words data-i18n="manifesto">Nothing waits on a shelf here. Your pizza is built the way you choose it, your tacos are wrapped while they are still hot, and you can follow every step — from confirmed to on the way.</p>
+            <div class="about-art" aria-hidden="true">
+              <figure class="art art--tall" data-depth="0.12">
+                <div class="art-mask img-reveal"><img src="imgs/art/dough-hands-1120.webp" srcset="imgs/art/dough-hands-560.webp 560w, imgs/art/dough-hands-1120.webp 1120w" sizes="(max-width: 900px) 52vw, 24vw" alt="" width="1120" height="1400" loading="lazy" decoding="async" /></div>
+              </figure>
+              <figure class="art art--round" data-depth="-0.16">
+                <div class="art-mask img-reveal"><img src="imgs/art/ai-dough-560.webp" srcset="imgs/art/ai-dough-560.webp 560w, imgs/art/ai-dough-1120.webp 1120w" sizes="(max-width: 900px) 38vw, 15vw" alt="" width="560" height="700" loading="lazy" decoding="async" /></div>
+              </figure>
+            </div>
+          </div>
+
+          <div class="about-grid">
+            <div class="about-card reveal">
+              <h3 class="about-k"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> <span data-i18n="hours_t">Opening Hours</span></h3>
+              <p data-i18n="hours_wd">Monday - Friday: 11:00 AM - 10:00 PM</p>
+              <p data-i18n="hours_we">Saturday - Sunday: 12:00 PM - 11:00 PM</p>
+            </div>
+            <div class="about-card call-to-order reveal">
+              <h3 class="about-k"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg> <span data-i18n="call_t">Call to Order</span></h3>
+              <p class="phone-number"><a href="tel:+15551234567" dir="ltr">(555) 123-4567</a></p>
+              <p data-i18n="call_sub">Call us directly to place your order!</p>
+            </div>
+            <div class="about-card reveal">
+              <h3 class="about-k"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg> <span data-i18n="loc_t">Location</span></h3>
+              <p>123 Food Street</p>
+              <p>Flavor Town, FT 12345</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ HOW IT WORKS (pinned on desktop) ============ -->
+      <section class="how" id="how" aria-labelledby="howTitle">
+        <div class="container how-grid">
+          <div class="how-visual" aria-hidden="true">
+            <div class="how-stack">
+              <div class="how-img is-active" data-step-img="0"><img src="imgs/art/ai-ingredients-1120.webp" srcset="imgs/art/ai-ingredients-560.webp 560w, imgs/art/ai-ingredients-1120.webp 1120w" sizes="(max-width: 900px) 92vw, 38vw" alt="" width="1120" height="1400" loading="lazy" decoding="async" /></div>
+              <div class="how-img" data-step-img="1"><img src="imgs/art/ai-into-oven-1120.webp" srcset="imgs/art/ai-into-oven-560.webp 560w, imgs/art/ai-into-oven-1120.webp 1120w" sizes="(max-width: 900px) 92vw, 38vw" alt="" width="1120" height="1400" loading="lazy" decoding="async" /></div>
+              <div class="how-img" data-step-img="2"><img src="imgs/art/pizza-box-1120.webp" srcset="imgs/art/pizza-box-560.webp 560w, imgs/art/pizza-box-1120.webp 1120w" sizes="(max-width: 900px) 92vw, 38vw" alt="" width="1120" height="1400" loading="lazy" decoding="async" /></div>
+              <div class="how-shade"></div>
+              <div class="how-count"><span class="how-count-track" id="howCount"><i>01</i><i>02</i><i>03</i></span></div>
+              <div class="how-chip is-active" data-step-chip="0">
+                <span class="chip-plus">+</span><span class="chip-t" data-i18n="how_chip_1">Extra cheese</span><b class="chip-v" dir="ltr">+$1.50</b>
+              </div>
+              <div class="how-chip" data-step-chip="1">
+                <span class="chip-k" data-i18n="how_chip_2">Mobile number</span><span class="chip-v" dir="ltr">0555 12 34 56</span>
+                <svg class="ic chip-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.2 4.2L19 7"/></svg>
+              </div>
+              <div class="how-chip" data-step-chip="2">
+                <span class="chip-dot"></span><span class="chip-t" data-i18n="st_on_way">On the way</span><b class="chip-v">~30 <span data-i18n="min_unit">min</span></b>
+              </div>
+              <div class="how-progress"><i id="howProgress"></i></div>
+            </div>
+          </div>
+          <div class="how-copy">
+            <p class="eyebrow"><span class="eyebrow-num">02</span><span data-i18n="how_label">How it works</span></p>
+            <h2 class="section-title" id="howTitle" data-split data-i18n="how_title">Three steps to dinner</h2>
+            <ol class="how-steps">
+              <li class="how-step is-active" data-step="0">
+                <span class="how-num">01</span>
+                <div><h3 data-i18n="how_1_t">Choose &amp; customise</h3><p data-i18n="how_1_d">Pick a dish, add extra ingredients or choose a drink size. The price updates as you go.</p></div>
+              </li>
+              <li class="how-step" data-step="1">
+                <span class="how-num">02</span>
+                <div><h3 data-i18n="how_2_t">Order with your number</h3><p data-i18n="how_2_d">Your name, Algerian mobile and address — no account needed.</p></div>
+              </li>
+              <li class="how-step" data-step="2">
+                <span class="how-num">03</span>
+                <div><h3 data-i18n="how_3_t">Follow it live</h3><p data-i18n="how_3_d">Your order number opens a live timeline.</p></div>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ SIGNATURE DISHES (horizontal reel, pinned on desktop) ============ -->
+      <section id="signature" class="reel" aria-labelledby="sigTitle">
+        <div class="reel-inner">
+          <div class="container reel-head">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-num">03</span><span data-i18n="sig_label">From the oven</span></p>
+              <h2 class="section-title" id="sigTitle" data-split data-i18n="sig_title">Signature dishes</h2>
+            </div>
+            <p class="section-lede reveal" data-i18n="sig_lede">A few favourites from the menu — tap one to make it yours.</p>
+          </div>
+          <div class="reel-viewport" id="reelViewport">
+            <ul class="reel-track" id="reelTrack">
+              <li class="reel-intro" aria-hidden="true">
+                <figure class="reel-intro-art"><div class="art-mask img-reveal"><img src="imgs/art/cheese-pull-1120.webp" srcset="imgs/art/cheese-pull-560.webp 560w, imgs/art/cheese-pull-1120.webp 1120w" sizes="(max-width: 900px) 70vw, 26vw" alt="" width="1120" height="1400" loading="lazy" decoding="async" /></div></figure>
+                <img class="reel-wheel" id="reelWheel" src="imgs/art/pizza-cut-520.webp" alt="" width="520" height="520" loading="lazy" decoding="async" />
+              </li>
+              <li class="reel-card reel-card--skeleton" aria-hidden="true"><div class="reel-item"><div class="reel-media"></div><div class="reel-body"><i></i><i></i><i></i></div></div></li>
+              <li class="reel-card reel-card--skeleton" aria-hidden="true"><div class="reel-item"><div class="reel-media"></div><div class="reel-body"><i></i><i></i><i></i></div></div></li>
+              <li class="reel-card reel-card--skeleton" aria-hidden="true"><div class="reel-item"><div class="reel-media"></div><div class="reel-body"><i></i><i></i><i></i></div></div></li>
+              <li class="reel-end">
+                <a href="#menu" class="reel-end-link">
+                  <span class="reel-end-k" data-i18n="sig_all">See the full menu</span>
+                  <span class="reel-end-arrow" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="container reel-foot" aria-hidden="true">
+            <div class="reel-progress"><i id="reelProgress"></i></div>
+            <span class="reel-hint reel-hint--pin" data-i18n="sig_hint">Keep scrolling</span>
+            <span class="reel-hint reel-hint--swipe" data-i18n="sig_swipe">Swipe to explore</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MENU ============ -->
+      <section id="menu" class="menu" aria-labelledby="menuTitle">
+        <div class="container">
+          <div class="menu-head">
+            <div>
+              <p class="eyebrow"><span class="eyebrow-num">04</span><span data-i18n="menu_label">The menu</span></p>
+              <h2 class="section-title" id="menuTitle" data-split data-i18n="menu_title">Our Menu</h2>
+              <p class="section-lede reveal" data-i18n="menu_lede">Tap a dish with options to make it yours.</p>
+            </div>
+            <div class="search-wrap reveal">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <input type="search" id="searchInput" class="search-input" data-i18n-ph="search_ph" placeholder="Search menu items..." aria-label="Search menu items" autocomplete="off" />
+            </div>
+          </div>
+          <div class="menu-controls reveal">
+            <div class="filter-buttons" role="group" aria-label="Categories">
+              <span class="filter-ink" aria-hidden="true"></span>
+              <button class="filter-btn active" data-category="all" aria-pressed="true" data-i18n="f_all">All</button>
+              <button class="filter-btn" data-category="pizzas" aria-pressed="false" data-i18n="f_pizzas">Pizzas</button>
+              <button class="filter-btn" data-category="tacos" aria-pressed="false" data-i18n="f_tacos">Tacos</button>
+              <button class="filter-btn" data-category="drinks" aria-pressed="false" data-i18n="f_drinks">Drinks</button>
+              <button class="filter-btn" data-category="familypack" aria-pressed="false" data-i18n="f_family">Family Pack</button>
+            </div>
+          </div>
+          <div id="menuGrid" class="menu-grid" aria-live="polite" aria-busy="true">
+            <noscript><div class="menu-state"><p>Please enable JavaScript to browse the menu and order online — or call us at (555) 123-4567.</p></div></noscript>
+            <div class="dish dish--skeleton" aria-hidden="true"><div class="dish-media"></div><div class="dish-body"><i></i><i></i><i></i></div></div>
+            <div class="dish dish--skeleton" aria-hidden="true"><div class="dish-media"></div><div class="dish-body"><i></i><i></i><i></i></div></div>
+            <div class="dish dish--skeleton" aria-hidden="true"><div class="dish-media"></div><div class="dish-body"><i></i><i></i><i></i></div></div>
+          </div>
+          <div class="load-more-wrap hidden" id="loadMoreWrap">
+            <button class="btn btn-ghost btn-load-more" id="loadMoreBtn">Load More</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ CONTACT / FINAL CTA (always lit by the oven) ============ -->
+      <section id="contact" class="contact theme-ember" aria-labelledby="contactTitle">
+        <div class="contact-bg" aria-hidden="true">
+          <img src="imgs/art/ai-oven-fire-1680.webp" srcset="imgs/art/ai-oven-fire-960.webp 960w, imgs/art/ai-oven-fire-1680.webp 1680w" sizes="100vw" alt="" width="1680" height="944" loading="lazy" decoding="async" />
+        </div>
+        <canvas class="embers" data-embers="contact" aria-hidden="true"></canvas>
+        <div class="container contact-inner">
+          <p class="eyebrow"><span class="eyebrow-num">05</span><span data-i18n="contact_label">Get in touch</span></p>
+          <h2 class="contact-title" id="contactTitle">
+            <span class="sr-only" data-i18n="contact_title">Contact Us</span>
+            <span class="contact-line" data-split data-i18n="contact_a">Hungry?</span>
+            <em class="contact-line serif-accent" data-split data-i18n="contact_b">Let's get cooking.</em>
+          </h2>
+          <div class="contact-row">
+            <a href="#menu" class="btn btn-primary btn-xl btn-magnetic"><span class="roll" data-i18n="order_now">Order Now</span>
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <ul class="contact-info">
+              <li class="reveal"><span class="contact-k" data-i18n="email_l">Email</span><a class="link-u" href="mailto:info@delicious-restaurant.com">info@delicious-restaurant.com</a></li>
+              <li class="reveal"><span class="contact-k" data-i18n="phone_l">Phone</span><a class="link-u" href="tel:+15551234567" dir="ltr">(555) 123-4567</a></li>
+              <li class="reveal"><span class="contact-k" data-i18n="addr_l">Address</span><span>123 Food Street, Flavor Town, FT 12345</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      </div><!-- /#mainView -->
+
+      <!-- ============ CART PAGE ============ -->
+      <section id="cartPage" class="page-section hidden" aria-labelledby="cartTitle">
+        <div class="container">
+          <header class="page-head">
+            <p class="eyebrow" data-i18n="cart_label">Your order</p>
+            <h2 class="page-title" id="cartTitle" data-i18n="cart_title">My Cart</h2>
+          </header>
+          <div class="cart-layout">
+            <div id="cartItems" class="cart-items-list"></div>
+            <aside id="cartFooter" class="cart-footer hidden" aria-label="Summary">
+              <h3 class="cart-summary-t" data-i18n="summary_t">Summary</h3>
+              <p class="form-error hidden" id="cartError" role="alert"></p>
+              <div class="cart-total">
+                <span data-i18n="cart_total">Total:</span>
+                <span id="cartTotal" class="price">$0.00</span>
+              </div>
+              <button class="btn btn-primary btn-block" id="cartOrderBtn" data-i18n="order_now_btn">Order Now</button>
+              <button class="btn btn-text" id="cartClearBtn" data-i18n="clear_cart">Clear Cart</button>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ THANK YOU ============ -->
+      <section id="thankYouPage" class="page-section hidden" aria-labelledby="thanksTitle">
+        <canvas class="embers" data-embers="burst" aria-hidden="true"></canvas>
+        <div class="container">
+          <div class="thank-you-card">
+            <div class="thank-you-art" aria-hidden="true">
+              <img class="thank-you-pizza" src="imgs/art/pizza-cut-520.webp" alt="" width="520" height="520" loading="lazy" decoding="async" />
+              <span class="thank-you-icon"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path class="check-path" d="M6.5 12.5l3.5 3.5 7.5-8"/></svg></span>
+            </div>
+            <p class="eyebrow" data-i18n="thanks_label">Confirmed</p>
+            <h2 class="page-title" id="thanksTitle" data-i18n="thanks_title">Order Placed!</h2>
+            <p class="thank-you-order-id hidden" id="thankYouOrderId"></p>
+            <p class="thank-you-text" data-i18n="thanks_text">Your order has been placed. We'll call you back shortly to confirm!</p>
+            <div class="thank-you-actions">
+              <a href="#track" class="btn btn-primary" id="thankYouTrackBtn" data-i18n="track_this_order">Track this order</a>
+              <a href="#menu" class="btn btn-ghost" data-i18n="back_menu">Back to Menu</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ TRACKING ============ -->
+      <section id="trackPage" class="page-section hidden" aria-labelledby="trackTitle">
+        <div class="container">
+          <header class="page-head">
+            <p class="eyebrow" data-i18n="track_label">Live status</p>
+            <h2 class="page-title" id="trackTitle" data-i18n="track_title">Track Your Order</h2>
+            <p class="page-lede" data-i18n="track_sub">Enter your order number and phone to see live status.</p>
+          </header>
+          <div class="track-layout">
+            <form id="trackForm" class="track-form card" novalidate>
+              <div class="form-group">
+                <label for="trackOrderId" data-i18n="track_id">Order number *</label>
+                <input type="number" id="trackOrderId" min="1" step="1" placeholder="e.g. 42" required inputmode="numeric" />
+              </div>
+              <div class="form-group">
+                <label for="trackPhone" data-i18n="track_phone">Mobile Number *</label>
+                <input type="tel" id="trackPhone" placeholder="e.g. 0555 12 34 56" required inputmode="tel" autocomplete="tel" dir="ltr" />
+                <small class="form-hint" data-i18n="co_phone_hint">Algerian mobile: 05 / 06 / 07 or +213…</small>
+              </div>
+              <p class="form-error hidden" id="trackError" role="alert"></p>
+              <button type="submit" class="btn btn-primary btn-block" id="trackBtn" data-i18n="track_btn">Track Order</button>
+            </form>
+            <div id="trackResult" class="track-result card hidden" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
     <footer class="footer" id="mainFooter">
       <div class="container">
         <div class="footer-grid">
-          <!-- Restaurant Contact -->
-          <div class="footer-section reveal">
-            <h4><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg> <span data-i18n="foot_contact">Contact Us</span></h4>
+          <div class="footer-section">
+            <h4 data-i18n="foot_contact">Contact Us</h4>
             <ul class="footer-contact-list">
-              <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg> <a href="mailto:info@delicious-restaurant.com">info@delicious-restaurant.com</a></li>
-              <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2z"/></svg> <a href="tel:+15551234567">(555) 123-4567</a></li>
-              <li><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg> 123 Food Street, Flavor Town, FT 12345</li>
+              <li><a class="link-u" href="mailto:info@delicious-restaurant.com">info@delicious-restaurant.com</a></li>
+              <li><a class="link-u" href="tel:+15551234567" dir="ltr">(555) 123-4567</a></li>
+              <li>123 Food Street, Flavor Town, FT 12345</li>
             </ul>
           </div>
-
-          <!-- Quick Links -->
-          <div class="footer-section reveal">
+          <div class="footer-section">
             <h4 data-i18n="foot_links">Quick Links</h4>
             <ul class="footer-links">
-              <li><a href="#home" data-i18n="nav_home">Home</a></li>
-              <li><a href="#menu" data-i18n="nav_menu">Menu</a></li>
-              <li><a href="#track" data-i18n="nav_track">Track</a></li>
-              <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
-              <li><a href="#cart" data-i18n="nav_cart">Cart</a></li>
+              <li><a class="link-u" href="#home" data-i18n="nav_home">Home</a></li>
+              <li><a class="link-u" href="#menu" data-i18n="nav_menu">Menu</a></li>
+              <li><a class="link-u" href="#track" data-i18n="nav_track">Track</a></li>
+              <li><a class="link-u" href="#contact" data-i18n="nav_contact">Contact</a></li>
+              <li><a class="link-u" href="#cart" data-i18n="nav_cart">Cart</a></li>
             </ul>
           </div>
-
-          <!-- Developer Attribution -->
-          <div class="footer-section reveal">
+          <div class="footer-section">
             <h4 data-i18n="foot_dev">Developed By</h4>
             <p class="dev-name">Omar Ayoub Benkreira</p>
             <ul class="footer-contact-list">
-              <li>
-                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>
-                <a href="mailto:ayoubecom111@gmail.com">ayoubecom111@gmail.com</a>
-              </li>
-              <li>
-                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-                <a href="https://www.linkedin.com/in/omar-ayoub-benkreira/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-              </li>
-              <li>
-                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.6c3.1-.4 6.4-1.5 6.4-7A5.4 5.4 0 0 0 20 4.8 5.1 5.1 0 0 0 19.9 1S18.7.6 16 2.5a13.4 13.4 0 0 0-7 0C6.3.6 5.1 1 5.1 1A5.1 5.1 0 0 0 5 4.8a5.4 5.4 0 0 0-1.5 3.8c0 5.4 3.3 6.6 6.4 7a3.4 3.4 0 0 0-.9 2.6V22"/></svg>
-                <a href="https://github.com/ayoubcoding111" target="_blank" rel="noopener noreferrer">GitHub</a>
-              </li>
+              <li><a class="link-u" href="mailto:ayoubecom111@gmail.com">ayoubecom111@gmail.com</a></li>
+              <li><a class="link-u" href="https://www.linkedin.com/in/omar-ayoub-benkreira/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+              <li><a class="link-u" href="https://github.com/ayoubcoding111" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
           </div>
         </div>
-
-        <!-- Bottom bar: copyright (staff login lives on /admin) -->
+        <div class="footer-word" aria-hidden="true"><span id="footerWord">Delicious</span></div>
         <div class="footer-bottom">
           <p>&copy; 2026 Delicious Restaurant. <span data-i18n="rights">All rights reserved.</span></p>
+          <a href="#home" class="back-top"><span class="roll" data-i18n="back_top">Back to top</span>
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></a>
         </div>
       </div>
     </footer>
 
-    <!-- Customize Item Modal -->
-    <div id="customizeModal" class="modal">
-      <div class="modal-content">
-        <span class="close-customize"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
-        <img id="custImage" class="cust-image" alt="" />
-        <h2 id="custName"></h2>
-        <p id="custDesc" class="menu-item-desc"></p>
-        <div id="custGroups"></div>
-        <div id="custReviews" class="cust-reviews"></div>
+    <!-- ============ CUSTOMIZE MODAL ============ -->
+    <div id="customizeModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="custName">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-content modal-content--split" data-lenis-prevent>
+        <button type="button" class="modal-close close-customize" data-i18n-aria="close" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <div class="cust-media"><img id="custImage" class="cust-image" alt="" /></div>
+        <div class="cust-body">
+          <h2 id="custName" class="modal-title"></h2>
+          <p id="custDesc" class="cust-desc"></p>
+          <div id="custGroups"></div>
+          <div id="custReviews" class="cust-reviews"></div>
+        </div>
         <div class="cust-footer">
-          <span id="custTotal" class="menu-item-price">$0.00</span>
-          <div style="display:flex;gap:0.5rem">
-            <button class="btn btn-secondary" id="custOrderBtn" style="display:none">
+          <span id="custTotal" class="price price-lg">$0.00</span>
+          <div class="cust-actions">
+            <button class="btn btn-ghost" id="custOrderBtn" style="display:none">
               <span data-i18n="order_now">Order Now</span>
             </button>
             <button class="btn btn-primary" id="custAddBtn">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/><path d="M2 3h3l2.6 12.4a1 1 0 0 0 1 .6h8.9a1 1 0 0 0 1-.8L20.5 7H6"/></svg>
-            <span data-i18n="add_cart">Add to Cart</span>
-          </button>
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              <span data-i18n="add_cart">Add to Cart</span>
+            </button>
+          </div>
         </div>
-      </div>
       </div>
     </div>
 
-    <!-- Checkout Modal -->
-    <div id="checkoutModal" class="modal">
-      <div class="modal-content">
-        <span class="close-checkout"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
-        <h2 data-i18n="co_title">Complete Your Order</h2>
-        <p class="checkout-subtitle" data-i18n="co_sub">Fill in your details to place your order.</p>
-        <form id="checkoutForm">
+    <!-- ============ CHECKOUT MODAL ============ -->
+    <div id="checkoutModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-content" data-lenis-prevent>
+        <button type="button" class="modal-close close-checkout" data-i18n-aria="close" aria-label="Close"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+        <h2 class="modal-title" id="checkoutTitle" data-i18n="co_title">Complete Your Order</h2>
+        <p class="modal-sub" data-i18n="co_sub">Fill in your details to place your order.</p>
+        <form id="checkoutForm" novalidate>
           <div class="form-group">
             <label for="customerName" data-i18n="co_name">Full Name *</label>
-            <input type="text" id="customerName" name="name" placeholder="e.g. Ahmed Benali" required />
+            <input type="text" id="customerName" name="name" placeholder="e.g. Ahmed Benali" required autocomplete="name" />
           </div>
           <div class="form-group">
             <label for="customerPhone" data-i18n="co_phone">Mobile Number *</label>
-            <input type="tel" id="customerPhone" name="phone" placeholder="e.g. 0555 12 34 56" required inputmode="tel" autocomplete="tel" />
+            <input type="tel" id="customerPhone" name="phone" placeholder="e.g. 0555 12 34 56" required inputmode="tel" autocomplete="tel" dir="ltr" />
             <small class="form-hint" data-i18n="co_phone_hint">Algerian mobile: 05 / 06 / 07 or +213…</small>
           </div>
           <div class="form-group">
             <label for="customerAddress" data-i18n="co_addr">Address *</label>
-            <input type="text" id="customerAddress" name="address" placeholder="e.g. 123 Rue Didouche Mourad, Alger" required />
+            <input type="text" id="customerAddress" name="address" placeholder="e.g. 123 Rue Didouche Mourad, Alger" required autocomplete="street-address" />
           </div>
           <div class="form-group">
             <label for="zoneSelect" data-i18n="zone_label">Delivery zone</label>
-            <select id="zoneSelect" name="zone"></select>
+            <div class="select-wrap"><select id="zoneSelect" name="zone"></select></div>
             <small class="form-hint" id="zoneFeeHint"></small>
           </div>
-          <p class="form-error hidden" id="checkoutError"></p>
-          <p class="cart-total checkout-total"><span data-i18n="cart_total">Total:</span> <span id="checkoutTotal" class="menu-item-price">$0.00</span></p>
-          <button type="submit" class="btn btn-primary" id="checkoutSubmitBtn" data-i18n="co_btn">Place Order</button>
+          <p class="form-error hidden" id="checkoutError" role="alert"></p>
+          <p class="cart-total checkout-total"><span data-i18n="cart_total">Total:</span> <span id="checkoutTotal" class="price">$0.00</span></p>
+          <button type="submit" class="btn btn-primary btn-block" id="checkoutSubmitBtn" data-i18n="co_btn">Place Order</button>
         </form>
       </div>
     </div>
 
-    <!-- Staff / admin login, dashboards and account modals live on /admin (admin.html). -->
+    <!-- Staff / admin portal lives on /admin (admin.html) and keeps its own stylesheet. -->
 
-    <script src="i18n.js"></script>
+    <script src="i18n.js?v=9"></script>
     <script src="icons.js"></script>
     <script src="validators.js"></script>
     <script src="cart.js"></script>
     <script src="ui.js"></script>
-    <script src="track.js"></script>
-    <script src="app.js?v=7"></script>
+    <script src="track.js?v=9"></script>
+    <script src="vendor/gsap.min.js"></script>
+    <script src="vendor/ScrollTrigger.min.js"></script>
+    <script src="vendor/lenis.min.js"></script>
+    <script src="fx.js?v=9"></script>
+    <script src="motion.js?v=9"></script>
+    <script src="app.js?v=9"></script>
     <script>
       // PWA: register service worker (offline menu). Silent if unsupported.
       if ('serviceWorker' in navigator) {

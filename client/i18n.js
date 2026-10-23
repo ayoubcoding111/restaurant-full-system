@@ -422,3 +422,135 @@ const I18n = {
         });
     }
 };
+
+// ============================================
+// Redesign (v8) — strings for the new public site.
+// Merged into the dictionaries above; t() falls back to English.
+// ============================================
+Object.assign(I18n.dict.en, {
+    skip: 'Skip to content',
+    hero_eyebrow: 'Pizzas · Tacos · Family packs — delivered',
+    hero_a: 'Hot from', hero_b: 'our oven', hero_c: 'to your door.',
+    hero_lede: 'Every order is made the moment you place it — customised your way, then tracked live, step by step, until it reaches you.',
+    hero_cta2: 'Track an order',
+    open_now: 'Open now', closed_now: 'Closed', until: 'until', opens: 'opens',
+    scroll_hint: 'Scroll',
+    badge_txt: 'ORDER • TRACK • ENJOY • ',
+    manifesto_label: 'The house',
+    manifesto: 'Nothing waits on a shelf here. Your pizza is built the way you choose it, your tacos are wrapped while they are still hot, and you can follow every step — from confirmed to on the way.',
+    how_label: 'How it works',
+    how_title: 'Three steps to dinner',
+    how_1_t: 'Choose & customise', how_1_d: 'Pick a dish, add extra ingredients or choose a drink size. The price updates as you go.',
+    how_2_t: 'Order with your number', how_2_d: 'Your name, Algerian mobile and address — no account needed. Pick a delivery zone and see the fee upfront.',
+    how_3_t: 'Follow it live', how_3_d: 'Your order number opens a live timeline: confirmed, preparing, ready, on the way, delivered.',
+    info_label: 'Visit & call',
+    menu_label: 'The menu',
+    menu_lede: 'Tap a dish with options to make it yours — extra toppings, sizes and all.',
+    customizable: 'Customisable',
+    no_items: 'Nothing matches that search. Try another dish or category.',
+    menu_failed: 'The menu could not be loaded. Check your connection and try again.',
+    retry: 'Retry',
+    contact_label: 'Get in touch',
+    contact_a: 'Hungry?', contact_b: "Let's get cooking.",
+    email_l: 'Email', phone_l: 'Phone', addr_l: 'Address',
+    close: 'Close', menu_toggle: 'Open menu', theme_t: 'Toggle dark mode',
+    cart_label: 'Your order', summary_t: 'Summary', each: 'each',
+    qty_minus: 'Decrease quantity', qty_plus: 'Increase quantity', remove: 'Remove',
+    thanks_label: 'Confirmed', track_label: 'Live status',
+    order_no: 'Order number'
+});
+Object.assign(I18n.dict.fr, {
+    skip: 'Aller au contenu',
+    hero_eyebrow: 'Pizzas · Tacos · Packs famille — livrés',
+    hero_a: 'Tout chaud', hero_b: 'de notre four', hero_c: 'à votre porte.',
+    hero_lede: 'Chaque commande est préparée au moment où vous la passez — personnalisée à votre goût, puis suivie en direct, étape par étape, jusqu’à chez vous.',
+    hero_cta2: 'Suivre une commande',
+    open_now: 'Ouvert', closed_now: 'Fermé', until: 'jusqu’à', opens: 'ouvre à',
+    scroll_hint: 'Défiler',
+    badge_txt: 'COMMANDER • SUIVRE • SAVOURER • ',
+    manifesto_label: 'La maison',
+    manifesto: 'Ici, rien n’attend sur une étagère. Votre pizza est montée comme vous la choisissez, vos tacos sont roulés encore chauds, et vous suivez chaque étape — de confirmée à en route.',
+    how_label: 'Comment ça marche',
+    how_title: 'Trois étapes jusqu’au dîner',
+    how_1_t: 'Choisissez & personnalisez', how_1_d: 'Choisissez un plat, ajoutez des ingrédients ou une taille de boisson. Le prix se met à jour en direct.',
+    how_2_t: 'Commandez avec votre numéro', how_2_d: 'Nom, mobile algérien et adresse — sans compte. Choisissez une zone de livraison et voyez les frais à l’avance.',
+    how_3_t: 'Suivez en direct', how_3_d: 'Votre numéro de commande ouvre une chronologie en direct : confirmée, en préparation, prête, en route, livrée.',
+    info_label: 'Venir & appeler',
+    menu_label: 'La carte',
+    menu_lede: 'Touchez un plat avec options pour le personnaliser — suppléments, tailles et plus.',
+    customizable: 'Personnalisable',
+    no_items: 'Aucun résultat. Essayez un autre plat ou une autre catégorie.',
+    menu_failed: 'Impossible de charger la carte. Vérifiez votre connexion et réessayez.',
+    retry: 'Réessayer',
+    contact_label: 'Nous contacter',
+    contact_a: 'Une petite faim ?', contact_b: 'On s’y met.',
+    email_l: 'E-mail', phone_l: 'Téléphone', addr_l: 'Adresse',
+    close: 'Fermer', menu_toggle: 'Ouvrir le menu', theme_t: 'Basculer le mode sombre',
+    cart_label: 'Votre commande', summary_t: 'Récapitulatif', each: 'l’unité',
+    qty_minus: 'Diminuer la quantité', qty_plus: 'Augmenter la quantité', remove: 'Retirer',
+    thanks_label: 'Confirmée', track_label: 'Statut en direct',
+    order_no: 'Numéro de commande'
+});
+Object.assign(I18n.dict.ar, {
+    skip: 'انتقل إلى المحتوى',
+    hero_eyebrow: 'بيتزا · تاكوس · وجبات عائلية — توصيل',
+    hero_a: 'ساخنة من', hero_b: 'فرننا', hero_c: 'إلى بابك.',
+    hero_lede: 'كل طلب يُحضَّر لحظة إرساله — حسب ذوقك، ثم تتابعه مباشرةً خطوة بخطوة حتى يصل إليك.',
+    hero_cta2: 'تتبّع طلبًا',
+    open_now: 'مفتوح الآن', closed_now: 'مغلق', until: 'حتى', opens: 'يفتح',
+    scroll_hint: 'مرّر',
+    badge_txt: 'DELICIOUS • ',
+    manifesto_label: 'البيت',
+    manifesto: 'لا شيء ينتظر على الرف هنا. تُحضَّر البيتزا كما تختارها، ويُلفّ التاكوس وهو ساخن، ويمكنك متابعة كل خطوة — من التأكيد إلى الطريق.',
+    how_label: 'كيف يعمل',
+    how_title: 'ثلاث خطوات إلى العشاء',
+    how_1_t: 'اختر وخصّص', how_1_d: 'اختر طبقًا، أضف مكونات أو اختر حجم المشروب. يتحدّث السعر مباشرةً.',
+    how_2_t: 'اطلب برقمك', how_2_d: 'الاسم، رقم جوال جزائري والعنوان — بدون حساب. اختر منطقة التوصيل وشاهد الرسوم مسبقًا.',
+    how_3_t: 'تابع مباشرةً', how_3_d: 'رقم طلبك يفتح خطًا زمنيًا مباشرًا: مؤكد، قيد التحضير، جاهز، في الطريق، تم التوصيل.',
+    info_label: 'الزيارة والاتصال',
+    menu_label: 'القائمة',
+    menu_lede: 'اضغط على طبق بخيارات لتخصيصه — إضافات وأحجام وأكثر.',
+    customizable: 'قابل للتخصيص',
+    no_items: 'لا توجد نتائج. جرّب طبقًا أو فئة أخرى.',
+    menu_failed: 'تعذّر تحميل القائمة. تحقق من الاتصال وحاول مجددًا.',
+    retry: 'إعادة المحاولة',
+    contact_label: 'تواصل معنا',
+    contact_a: 'جائع؟', contact_b: 'لنبدأ الطهي.',
+    email_l: 'البريد', phone_l: 'الهاتف', addr_l: 'العنوان',
+    close: 'إغلاق', menu_toggle: 'فتح القائمة', theme_t: 'تبديل الوضع الداكن',
+    cart_label: 'طلبك', summary_t: 'الملخص', each: 'للقطعة',
+    qty_minus: 'إنقاص الكمية', qty_plus: 'زيادة الكمية', remove: 'إزالة',
+    thanks_label: 'تم التأكيد', track_label: 'الحالة المباشرة',
+    order_no: 'رقم الطلب'
+});
+
+// ============================================
+// Redesign (v9) — intro, marquee, signature reel and footer strings.
+// ============================================
+Object.assign(I18n.dict.en, {
+    loader_txt: 'Firing up the oven',
+    mq_a: 'Made to order', mq_b: 'Tracked live', mq_c: 'Delivered hot',
+    how_chip_1: 'Extra cheese', how_chip_2: 'Mobile number',
+    sig_label: 'From the oven', sig_title: 'Signature dishes',
+    sig_lede: 'A few favourites from the menu — tap one to make it yours.',
+    sig_all: 'See the full menu', sig_hint: 'Keep scrolling', sig_swipe: 'Swipe to explore',
+    back_top: 'Back to top'
+});
+Object.assign(I18n.dict.fr, {
+    loader_txt: 'On allume le four',
+    mq_a: 'Fait à la commande', mq_b: 'Suivi en direct', mq_c: 'Livré bien chaud',
+    how_chip_1: 'Fromage en plus', how_chip_2: 'Numéro mobile',
+    sig_label: 'Sortie du four', sig_title: 'Nos incontournables',
+    sig_lede: 'Quelques favoris de la carte — touchez-en un pour le personnaliser.',
+    sig_all: 'Voir toute la carte', sig_hint: 'Continuez à défiler', sig_swipe: 'Glissez pour découvrir',
+    back_top: 'Haut de page'
+});
+Object.assign(I18n.dict.ar, {
+    loader_txt: 'نُشعل الفرن',
+    mq_a: 'يُحضَّر عند الطلب', mq_b: 'تتبّع مباشر', mq_c: 'يصلك ساخنًا',
+    how_chip_1: 'جبن إضافي', how_chip_2: 'رقم الجوال',
+    sig_label: 'من الفرن', sig_title: 'أطباقنا المميّزة',
+    sig_lede: 'بعض الأطباق المفضّلة من القائمة — اضغط على أحدها لتخصيصه.',
+    sig_all: 'عرض القائمة كاملة', sig_hint: 'واصل التمرير', sig_swipe: 'اسحب للاستكشاف',
+    back_top: 'العودة للأعلى'
+});

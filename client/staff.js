@@ -230,11 +230,11 @@ const KitchenFlow = {
                         ${isNew ? '<span class="new-badge">New</span>' : ''}
                     </div>
                     <div class="order-body">
-                        <p><strong>Customer:</strong> ${escAttr(order.customer_name)}</p>
+                        <p><strong>Customer:</strong> <bdi>${escAttr(order.customer_name)}</bdi></p>
                         <p><strong>Phone:</strong> <button type="button" class="phone-copy" data-phone="${escAttr(order.customer_phone)}" onclick="copyPhone(this.dataset.phone)" title="${escAttr(I18n.t('copy_phone'))}">${Icons.copy} ${escAttr(order.customer_phone)}</button></p>
-                        <p><strong>Address:</strong> ${escAttr(order.customer_address)}</p>
-                        ${order.zone_name ? `<p><strong>${I18n.t('zone_label')}:</strong> ${escAttr(order.zone_name)}</p>` : ''}
-                        <p><strong>Items:</strong> ${itemsList || 'N/A'}</p>
+                        <p><strong>Address:</strong> <bdi>${escAttr(order.customer_address)}</bdi></p>
+                        ${order.zone_name ? `<p><strong>${I18n.t('zone_label')}:</strong> <bdi>${escAttr(order.zone_name)}</bdi></p>` : ''}
+                        <p><strong>Items:</strong> <bdi>${itemsList || 'N/A'}</bdi></p>
                         ${order.subtotal != null && Number(order.delivery_fee) > 0 ? `<p><strong>${I18n.t('subtotal')}:</strong> $${parseFloat(order.subtotal).toFixed(2)} + <strong>${I18n.t('delivery_fee')}:</strong> $${parseFloat(order.delivery_fee).toFixed(2)}</p>` : ''}
                         <p class="order-total"><strong>${I18n.t('cart_total')}</strong> $${parseFloat(order.total).toFixed(2)}</p>
                         ${this.assignSelectHtml(order, view)}
