@@ -1,0 +1,19 @@
+{
+  "name": "delecius-client",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Delicious Restaurant public site (static, no build step). npm is only used to vendor the motion libraries into client/vendor/.",
+  "scripts": {
+    "vendor": "node scripts/vendor.js",
+    "postinstall": "node scripts/vendor.js",
+    "check": "node scripts/check.js",
+    "preview": "node scripts/preview.js"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "5.3.0",
+    "@fontsource-variable/readex-pro": "5.3.0",
+    "@fontsource/instrument-serif": "5.3.0",
+    "gsap": "3.13.0",
+    "lenis": "1.3.4"
+  }
+}

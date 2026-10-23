@@ -236,12 +236,73 @@ const AdminGate = {
 };
 
 // ============================================
+// Portal presentation helpers (redesign) — no data, API or auth logic here.
+// ============================================
+// Theme: same storage key and default ('dark') as the public site, so both
+// halves of the site agree.
+const PortalTheme = {
+    init() {
+        let saved = null;
+        try { saved = localStorage.getItem('theme'); } catch { /* storage blocked */ }
+        this.set(saved === 'light' ? 'light' : 'dark', false);
+        document.getElementById('themeSwitch')?.addEventListener('change', (e) => {
+            this.set(e.target.checked ? 'dark' : 'light', true);
+        });
+    },
+    set(theme, persist) {
+        document.documentElement.setAttribute('data-theme', theme);
+        if (persist) { try { localStorage.setItem('theme', theme); } catch { /* ignore */ } }
+        const sw = document.getElementById('themeSwitch');
+        if (sw) sw.checked = theme === 'dark';
+        document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#100d0b' : '#f3ece1');
+    }
+};
+
+// aria-label / title strings for icon-only controls (I18n.apply only does text + placeholders).
+function applyPortalI18n() {
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', I18n.t(el.dataset.i18nAria)));
+    document.querySelectorAll('[data-i18n-title]').forEach(el => el.setAttribute('title', I18n.t(el.dataset.i18nTitle)));
+    // Big titles: set the last word in the serif accent (text only, no HTML).
+    document.querySelectorAll('[data-accent]').forEach(el => {
+        const text = el.textContent.trim();
+        const cut = text.lastIndexOf(' ');
+        if (cut < 1) return;
+        const em = document.createElement('em');
+        em.className = 'serif-accent';
+        em.textContent = text.slice(cut + 1);
+        el.textContent = text.slice(0, cut) + ' ';
+        el.appendChild(em);
+    });
+}
+
+// Mirror the classes that ui.js / staff.js / admin.js / i18n.js toggle onto
+// ARIA state (filter pills, current tab, language menu, sidebar toggle).
+function syncPortalA11y() {
+    document.querySelectorAll('.filter-btn').forEach(b => b.setAttribute('aria-pressed', String(b.classList.contains('active'))));
+    document.querySelectorAll('.admin-dash-tab').forEach(b => {
+        if (!b.classList.contains('active')) return b.removeAttribute('aria-current');
+        if (b.getAttribute('aria-current') === 'page') return;
+        b.setAttribute('aria-current', 'page');
+        b.scrollIntoView({ block: 'nearest', inline: 'nearest' }); // phone tab strip
+        // Switching tabs while scrolled down: start the new panel at its top.
+        const main = document.querySelector('.admin-main');
+        if (main && main.getBoundingClientRect().top < 0) main.scrollIntoView({ block: 'start' });
+    });
+    const menu = document.getElementById('langMenu');
+    document.getElementById('langGlobeBtn')?.setAttribute('aria-expanded', String(!!menu && !menu.classList.contains('hidden')));
+    const layout = document.querySelector('.admin-layout');
+    document.getElementById('adminHamburger')?.setAttribute('aria-expanded', String(!!layout && !layout.classList.contains('collapsed')));
+}
+
+// ============================================
 // Admin App Initialization
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
     I18n.init();
-    // Apply the saved client theme (no toggle on this page).
-    document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');
+    applyPortalI18n();
+    PortalTheme.init();
+    syncPortalA11y();
+    new MutationObserver(syncPortalA11y).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
     initConfirmModal();
     Auth.init();
     // Session death mid-work (server restart, password change) should land

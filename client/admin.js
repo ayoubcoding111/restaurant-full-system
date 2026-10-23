@@ -118,7 +118,7 @@ const AdminDashboard = {
                     <strong>${s.username}</strong>
                     <span>${s.full_name}</span>
                     <span class="staff-email">${s.email || 'no email'}</span>
-                    <span class="status-badge status-${s.role === 'admin' ? 'confirmed' : 'pending'}">${s.role}</span>
+                    <span class="status-badge role-badge role-${s.role === 'admin' ? 'admin' : 'staff'}">${s.role}</span>
                 </div>
                 <div class="staff-row-actions">
                     <button class="btn btn-sm btn-secondary" onclick="AdminDashboard.openEditStaff(${s.id})">${Icons.pencil} Edit</button>
@@ -837,7 +837,7 @@ const AdminDashboard = {
                     <span class="rating-badge">★ ${r.rating}</span>
                     <span>${escAttr(r.rater_name)}</span>
                     ${r.comment ? `<span>${escAttr(r.comment)}</span>` : ''}
-                    <span class="status-badge ${r.is_approved ? 'status-delivered' : 'status-pending'}">${r.is_approved ? 'approved' : 'pending'}</span>
+                    <span class="status-badge ${r.is_approved ? 'state-on' : 'status-pending'}">${r.is_approved ? 'approved' : 'pending'}</span>
                 </div>
                 <div class="staff-row-actions">
                     <button class="btn btn-sm btn-secondary" onclick="AdminDashboard.moderateReview(${r.id}, ${r.is_approved ? 0 : 1})">${r.is_approved ? I18n.t('hide_btn') : I18n.t('approve_btn')}</button>
@@ -910,7 +910,7 @@ const AdminDashboard = {
                     <span>${I18n.t('z_fee_label')}: $${Number(z.fee).toFixed(2)}</span>
                     <span>${z.free_over != null ? I18n.t('free_over') + ' $' + Number(z.free_over).toFixed(2) : I18n.t('z_no_free')}</span>
                     <span>${z.eta_min ? '~' + z.eta_min + ' ' + I18n.t('min_unit') : ''}</span>
-                    <span class="status-badge ${z.is_active ? 'status-delivered' : 'status-pending'}">${z.is_active ? I18n.t('active_on') : I18n.t('active_off')}</span>
+                    <span class="status-badge ${z.is_active ? 'state-on' : 'state-off'}">${z.is_active ? I18n.t('active_on') : I18n.t('active_off')}</span>
                 </div>
                 <div class="staff-row-actions">
                     <button class="btn btn-sm btn-secondary" onclick="AdminDashboard.toggleZone(${z.id}, ${z.is_active ? 0 : 1})">${z.is_active ? I18n.t('disable_btn') : I18n.t('enable_btn')}</button>
