@@ -14,8 +14,34 @@ No frontend frameworks, no build step. Brute-force resistant auth (per-account
 lockout + IP bans) and delivered orders auto-purge after 24 h (counts + revenue
 kept for analytics, customer PII deleted).
 
+## Screenshots
+
+The public site (v9, "Ember & Flour") and the staff portal, captured from the local preview
+(`npm run preview`, sample data).
+
+### Customer site
+
+![Hero — desktop](docs/screenshots/hero-desktop.png)
+
+<p align="center">
+  <img src="docs/screenshots/hero-mobile.png" alt="Hero — phone" width="260" />
+</p>
+
+| Signature dishes | Menu |
+|---|---|
+| ![Signature dishes reel](docs/screenshots/signature-desktop.png) | ![Menu](docs/screenshots/menu-desktop.png) |
+
+| Cart | Order tracking |
+|---|---|
+| ![Cart](docs/screenshots/cart-desktop.png) | ![Order tracking](docs/screenshots/track-desktop.png) |
+
+### Staff & admin portal
+
+![Staff and admin login](docs/screenshots/admin-login-desktop.png)
+
 ## Table of Contents
 
+- [Screenshots](#screenshots)
 - [Features](#features)
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
