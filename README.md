@@ -14,6 +14,14 @@ No frontend frameworks, no build step. Brute-force resistant auth (per-account
 lockout + IP bans) and delivered orders auto-purge after 24 h (counts + revenue
 kept for analytics, customer PII deleted).
 
+## Demo
+
+<p align="center">
+  <video src="portfolio-media/delicious-hero-scroll.mp4" controls muted width="100%"></video>
+</p>
+
+<p align="center"><a href="portfolio-media/delicious-hero-scroll.mp4">▶ Watch the hero scroll video</a></p>
+
 ## Screenshots
 
 The public site (v9, "Ember & Flour") and the staff portal, captured from the local preview
@@ -45,6 +53,7 @@ The public site (v9, "Ember & Flour") and the staff portal, captured from the lo
 
 ## Table of Contents
 
+- [Demo](#demo)
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Quick Start](#quick-start)
