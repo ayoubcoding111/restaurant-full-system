@@ -17,10 +17,10 @@ kept for analytics, customer PII deleted).
 ## Demo
 
 <p align="center">
-  <video src="portfolio-media/delicious-hero-scroll.mp4" controls muted width="100%"></video>
+  <video src="https://github.com/ayoubcoding111/restaurent-/blob/main/portfolio-media/delicious-hero-scroll.mp4?raw=true" controls muted width="100%"></video>
 </p>
 
-<p align="center"><a href="portfolio-media/delicious-hero-scroll.mp4">▶ Watch the hero scroll video</a></p>
+<p align="center"><a href="https://github.com/ayoubcoding111/restaurent-/blob/main/portfolio-media/delicious-hero-scroll.mp4?raw=true">▶ Watch the hero scroll video</a></p>
 
 ## Screenshots
 
